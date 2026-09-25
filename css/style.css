@@ -1430,5 +1430,68 @@
       transform: scale(1.02);
     }
 
+    /* Clean & Modern Navigation Tabs (書籤列樣式整理) */
+    nav#tabs-nav {
+      height: 48px !important;
+      min-height: 48px !important;
+      padding: 0 1rem !important;
+      display: flex !important;
+      align-items: stretch !important;
+      gap: 0.5rem !important;
+    }
+    nav#tabs-nav .tab-btn {
+      background: transparent !important;
+      background-color: transparent !important;
+      border: none !important;
+      border-bottom: 2px solid transparent !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      padding: 0 1rem !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+    }
+    nav#tabs-nav .tab-btn:hover {
+      background: transparent !important;
+      background-color: transparent !important;
+    }
+    nav#tabs-nav .tab-btn.tab-active {
+      border: none !important;
+      border-bottom: 3px solid currentColor !important;
+    }
+    body:not(.light-mode):not(.has-custom-accent) nav#tabs-nav .tab-btn {
+      color: #a1a1aa !important;
+    }
+    body:not(.light-mode):not(.has-custom-accent) nav#tabs-nav .tab-btn:hover {
+      color: #ffffff !important;
+    }
+    body:not(.light-mode):not(.has-custom-accent) nav#tabs-nav .tab-btn.tab-active {
+      color: #ffffff !important;
+      border-bottom-color: #ffffff !important;
+    }
+    body.light-mode:not(.has-custom-accent) nav#tabs-nav .tab-btn {
+      color: #64748b !important;
+    }
+    body.light-mode:not(.has-custom-accent) nav#tabs-nav .tab-btn:hover {
+      color: #000000 !important;
+    }
+    body.light-mode:not(.has-custom-accent) nav#tabs-nav .tab-btn.tab-active {
+      color: #000000 !important;
+      border-bottom-color: #000000 !important;
+    }
+    body.has-custom-accent nav#tabs-nav .tab-btn {
+      color: var(--theme-text, #ffffff) !important;
+      opacity: 0.75 !important;
+    }
+    body.has-custom-accent nav#tabs-nav .tab-btn:hover {
+      opacity: 1 !important;
+    }
+    body.has-custom-accent nav#tabs-nav .tab-btn.tab-active {
+      opacity: 1 !important;
+      border-bottom-color: var(--theme-text, #ffffff) !important;
+    }
+
 
 

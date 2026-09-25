@@ -116,12 +116,7 @@
         cancel_on_tap_outside: true,
         use_fedcm_for_prompt: false
       });
-      // Try prompt One Tap
-      window.google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          console.log('One Tap skipped or not displayed in this context');
-        }
-      });
+      // Do not auto-prompt One Tap to prevent intrusive popups on every page load
     }
 
     if (window.google && window.google.accounts) {
@@ -189,8 +184,7 @@
         const backdrop = document.getElementById('drawer-backdrop');
         if (drawer) drawer.classList.add('-translate-x-full');
         if (backdrop) backdrop.classList.add('hidden');
-        showPortal();
-        showToast('已登出並返回封面', 'info');
+        showToast('已登出', 'info');
       });
     }
 
@@ -252,16 +246,15 @@
     function hidePortal() {
       if (portalModal) {
         portalModal.classList.add('portal-hidden');
-        setTimeout(() => {
-          portalModal.style.display = 'none';
-        }, 400);
+        portalModal.classList.add('hidden');
+        portalModal.style.display = 'none';
       }
     }
 
     function showPortal() {
       if (portalModal) {
         portalModal.style.display = 'flex';
-        // Force reflow
+        portalModal.classList.remove('hidden');
         void portalModal.offsetWidth;
         portalModal.classList.remove('portal-hidden');
       }
@@ -270,14 +263,8 @@
     window.hidePortalCover = hidePortal;
     window.showPortalCover = showPortal;
 
-    // Check if user has already bypassed portal or is logged in
-    const isGuestBypass = sessionStorage.getItem('MUN_PORTAL_GUEST') === 'true';
-    if (state.isViewerMode || state.currentUser || isGuestBypass) {
-      if (portalModal) {
-        portalModal.classList.add('portal-hidden');
-        portalModal.style.display = 'none';
-      }
-    }
+    // Never auto pop up portal cover on load
+    hidePortal();
 
     if (portalGuestBtn) {
       portalGuestBtn.addEventListener('click', () => {

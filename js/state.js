@@ -281,7 +281,10 @@
     const roomId = state.roomId;
     if (!userId && !roomId) return false;
 
-    const query = roomId ? `roomId=${encodeURIComponent(roomId)}` : `userId=${encodeURIComponent(userId)}`;
+    // Logged in users prioritize their personal user cloud save, delegates in viewer mode prioritize roomId
+    const query = (state.isViewerMode && roomId) 
+      ? `roomId=${encodeURIComponent(roomId)}` 
+      : (userId ? `userId=${encodeURIComponent(userId)}` : `roomId=${encodeURIComponent(roomId)}`);
 
     try {
       const res = await fetch(`/api/sync?${query}`);
