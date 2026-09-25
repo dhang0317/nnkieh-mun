@@ -26,40 +26,40 @@
       let rightContent = '';
 
       if (isUncalled) {
-        // 出席缺席大小要一樣，不用英文，要有顏色
+        // 出席缺席大小要一樣，不用英文，文字為清晰白字（無紅綠字體）
         rightContent = `
           <div class="rollcall-btn-container flex items-center space-x-2 shrink-0">
-            <button type="button" class="btn-rollcall-present flex-1 rounded-xl font-black text-center transition cursor-pointer" style="border: 1.5px solid #10b981 !important; color: #10b981 !important; background-color: rgba(16, 185, 129, 0.15) !important;">
+            <button type="button" class="btn-rollcall-present flex-1 rounded-xl font-black text-center transition cursor-pointer" style="border: 1.5px solid #10b981 !important; color: #ffffff !important; background-color: rgba(16, 185, 129, 0.25) !important;">
               出席
             </button>
-            <button type="button" class="btn-rollcall-absent flex-1 rounded-xl font-black text-center transition cursor-pointer" style="border: 1.5px solid #ef4444 !important; color: #ef4444 !important; background-color: rgba(239, 68, 68, 0.15) !important;">
+            <button type="button" class="btn-rollcall-absent flex-1 rounded-xl font-black text-center transition cursor-pointer" style="border: 1.5px solid #ef4444 !important; color: #ffffff !important; background-color: rgba(239, 68, 68, 0.25) !important;">
               缺席
             </button>
           </div>
         `;
       } else if (isPresent) {
-        // 按下去變成半透明綠色（再按變成 PV）
+        // 按下去變成半透明綠色（再按變成 PV），文字為清晰白字
         rightContent = `
           <div class="rollcall-btn-container shrink-0 flex justify-end">
-            <button type="button" class="btn-rollcall-expanded btn-rollcall-status-present w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(16, 185, 129, 0.28) !important; background: rgba(16, 185, 129, 0.28) !important; color: #10b981 !important; border: 2px solid #10b981 !important;">
+            <button type="button" class="btn-rollcall-expanded btn-rollcall-status-present w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(16, 185, 129, 0.28) !important; background: rgba(16, 185, 129, 0.28) !important; color: #ffffff !important; border: 2px solid #10b981 !important;">
               出席
             </button>
           </div>
         `;
       } else if (isPv) {
-        // 再按變成 PV（半透明琥珀金）
+        // 再按變成 PV（半透明琥珀金），文字為清晰白字
         rightContent = `
           <div class="rollcall-btn-container shrink-0 flex justify-end">
-            <button type="button" class="btn-rollcall-expanded btn-rollcall-status-pv w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(245, 158, 11, 0.28) !important; background: rgba(245, 158, 11, 0.28) !important; color: #f59e0b !important; border: 2px solid #f59e0b !important;">
+            <button type="button" class="btn-rollcall-expanded btn-rollcall-status-pv w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(245, 158, 11, 0.28) !important; background: rgba(245, 158, 11, 0.28) !important; color: #ffffff !important; border: 2px solid #f59e0b !important;">
               出席且投票
             </button>
           </div>
         `;
       } else if (isAbsent) {
-        // 按下去變成半透明紅色
+        // 按下去變成半透明紅色，文字為清晰白字
         rightContent = `
           <div class="rollcall-btn-container shrink-0 flex justify-end">
-            <button type="button" class="btn-rollcall-expanded btn-rollcall-status-absent w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(239, 68, 68, 0.28) !important; background: rgba(239, 68, 68, 0.28) !important; color: #ef4444 !important; border: 2px solid #ef4444 !important;">
+            <button type="button" class="btn-rollcall-expanded btn-rollcall-status-absent w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(239, 68, 68, 0.28) !important; background: rgba(239, 68, 68, 0.28) !important; color: #ffffff !important; border: 2px solid #ef4444 !important;">
               缺席
             </button>
           </div>

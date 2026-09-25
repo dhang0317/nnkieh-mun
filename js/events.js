@@ -637,13 +637,13 @@
         // 將縮放變數作用在 main，卡片內部所有元件（國旗、字體、Padding、按鈕等）同步縮放
         mainEl.style.setProperty('--content-scale', num);
 
-        // 自適應點名卡片欄數
+        // 自適應點名卡片欄數 (縮放極大時自動調整為單欄，極小時可多欄)
         const rcGrid = document.getElementById('grid-rollcall-delegates');
         if (rcGrid) {
           rcGrid.className = rcGrid.className.replace(/grid-cols-\d+|md:grid-cols-\d+|xl:grid-cols-\d+/g, '').trim();
-          if (num >= 1.35) {
+          if (num >= 1.25) {
             rcGrid.className += ' grid-cols-1';
-          } else if (num <= 0.85) {
+          } else if (num <= 0.8) {
             rcGrid.className += ' grid-cols-1 md:grid-cols-2 xl:grid-cols-3';
           } else {
             rcGrid.className += ' grid-cols-1 md:grid-cols-2';
@@ -654,9 +654,9 @@
         const voteGrid = document.getElementById('grid-substantive-ballots');
         if (voteGrid) {
           voteGrid.className = voteGrid.className.replace(/grid-cols-\d+|md:grid-cols-\d+|xl:grid-cols-\d+/g, '').trim();
-          if (num >= 1.35) {
+          if (num >= 1.25) {
             voteGrid.className += ' grid-cols-1';
-          } else if (num <= 0.85) {
+          } else if (num <= 0.8) {
             voteGrid.className += ' grid-cols-1 md:grid-cols-2 xl:grid-cols-3';
           } else {
             voteGrid.className += ' grid-cols-1 md:grid-cols-2';
