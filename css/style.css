@@ -989,34 +989,73 @@
     }
 
     /* Custom Theme Accent System (自選顏色：底色與上排變色，卡片框與內部底色保持原樣，當文字檢測到下方顏色與其太過相近應該要換顏色 -> 使用動態 --theme-text) */
-    body.has-custom-accent {
+    html body.has-custom-accent,
+    html body.has-custom-accent.light-mode,
+    html body.has-custom-accent:not(.light-mode) {
       background-color: var(--theme-accent) !important;
+      background: var(--theme-accent) !important;
     }
-    body.has-custom-accent #main-header {
+    html body.has-custom-accent #main-header,
+    html body.has-custom-accent.light-mode #main-header,
+    html body.has-custom-accent:not(.light-mode) #main-header {
       background-color: var(--theme-accent) !important;
+      background: var(--theme-accent) !important;
       border-color: rgba(0, 0, 0, 0.12) !important;
     }
-    body.has-custom-accent #main-header,
-    body.has-custom-accent #main-header * {
+    html body.has-custom-accent #main-header,
+    html body.has-custom-accent #main-header *,
+    html body.has-custom-accent.light-mode #main-header,
+    html body.has-custom-accent.light-mode #main-header *,
+    html body.has-custom-accent:not(.light-mode) #main-header,
+    html body.has-custom-accent:not(.light-mode) #main-header * {
       color: var(--theme-text, #ffffff) !important;
     }
-    body.has-custom-accent #main-header input {
+    html body.has-custom-accent #main-header input,
+    html body.has-custom-accent.light-mode #main-header input,
+    html body.has-custom-accent:not(.light-mode) #main-header input {
       color: var(--theme-text, #ffffff) !important;
     }
-    body.has-custom-accent .tab-active,
-    body.has-custom-accent .tab-active span {
+    html body.has-custom-accent nav#tabs-nav,
+    html body.has-custom-accent.light-mode nav#tabs-nav,
+    html body.has-custom-accent:not(.light-mode) nav#tabs-nav {
+      background-color: var(--theme-accent) !important;
+      background: var(--theme-accent) !important;
+      border-color: rgba(0, 0, 0, 0.15) !important;
+    }
+    html body.has-custom-accent .tab-btn span {
+      color: var(--theme-text, #ffffff) !important;
+      opacity: 0.75;
+    }
+    html body.has-custom-accent .tab-btn:hover span {
+      opacity: 1;
+    }
+    html body.has-custom-accent .tab-active,
+    html body.has-custom-accent .tab-active span,
+    html body.has-custom-accent.light-mode .tab-active,
+    html body.has-custom-accent.light-mode .tab-active span,
+    html body.has-custom-accent:not(.light-mode) .tab-active,
+    html body.has-custom-accent:not(.light-mode) .tab-active span {
       border-bottom-color: var(--theme-text, #ffffff) !important;
       color: var(--theme-text, #ffffff) !important;
+      opacity: 1 !important;
+      font-weight: bold !important;
     }
-    body.has-custom-accent main,
-    body.has-custom-accent .view-panel,
-    body.has-custom-accent #view-unmod {
+    html body.has-custom-accent main,
+    html body.has-custom-accent .view-panel,
+    html body.has-custom-accent #view-unmod,
+    html body.has-custom-accent.light-mode main,
+    html body.has-custom-accent.light-mode .view-panel,
+    html body.has-custom-accent.light-mode #view-unmod,
+    html body.has-custom-accent:not(.light-mode) main,
+    html body.has-custom-accent:not(.light-mode) .view-panel,
+    html body.has-custom-accent:not(.light-mode) #view-unmod {
       background-color: var(--theme-accent) !important;
+      background: var(--theme-accent) !important;
     }
-    body.has-custom-accent #gsl-progress-bar,
-    body.has-custom-accent #mod-speaker-progress,
-    body.has-custom-accent #mod-total-progress,
-    body.has-custom-accent #unmod-total-progress {
+    html body.has-custom-accent #gsl-progress-bar,
+    html body.has-custom-accent #mod-speaker-progress,
+    html body.has-custom-accent #mod-total-progress,
+    html body.has-custom-accent #unmod-total-progress {
       background-color: var(--theme-text, #000000) !important;
     }
 
