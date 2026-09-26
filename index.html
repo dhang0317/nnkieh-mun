@@ -37,7 +37,7 @@
       }
     }
   </script>
-  <link rel="stylesheet" href="css/style.css?v=2026092605">
+  <link rel="stylesheet" href="css/style.css?v=2026092607">
 </head>
 <body class="h-screen w-screen flex flex-col overflow-hidden bg-black">
 
@@ -530,89 +530,178 @@
       </div>
     </div>
 
-    <!-- 8. RESOLUTION VOTE VIEW (/tabs/vote) -->
+    <!-- 8. RESOLUTION VOTE VIEW (/tabs/vote) - MUN Command Style -->
     <div id="view-vote" class="view-panel absolute inset-0 overflow-y-auto p-4 sm:p-6 pb-28 sm:pb-36 bg-slate-50 custom-scroll hidden">
       <div class="max-w-6xl mx-auto space-y-6">
 
-        <!-- Voting Stages Subnav -->
+        <!-- Top Header & Stages Bar -->
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-center space-x-2">
-            <span class="text-xs font-bold text-slate-400 uppercase" data-i18n="stage">Stage:</span>
-            <button id="vote-stage-r1" class="px-3 py-1 bg-primary text-white rounded-lg text-xs font-bold shadow-sm" data-i18n="stage1st">1st Round</button>
-            <button id="vote-stage-r2" class="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-200" data-i18n="stage2nd">2nd Round (Passes)</button>
-            <button id="vote-stage-rights" class="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-200" data-i18n="stageRights">Rights Speeches</button>
+            <span class="text-xs text-slate-400 uppercase tracking-wider" data-i18n="stage">Stage:</span>
+            <button id="vote-stage-r1" class="px-3 py-1.5 bg-primary text-white rounded-lg text-xs transition" data-i18n="stage1st">1st Round</button>
+            <button id="vote-stage-r2" class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-xs hover:bg-slate-200 transition" data-i18n="stage2nd">2nd Round (Passes)</button>
+            <button id="vote-stage-rights" class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-xs hover:bg-slate-200 transition" data-i18n="stageRights">Rights Speeches</button>
           </div>
-          <div class="flex items-center space-x-3 text-xs">
-            <button id="btn-consensus-vote" class="px-3 py-1.5 bg-secondary/10 hover:bg-secondary/20 text-secondary font-bold rounded-lg border border-secondary/30" data-i18n="consensusVote">Consensus Vote</button>
-            <button id="btn-toggle-results" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg" data-i18n="hideResults">Hide Results</button>
+          <div class="flex items-center space-x-2 text-xs">
+            <button id="btn-configure-vote" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg border border-slate-300 transition flex items-center space-x-1.5">
+              <i class="fa-solid fa-sliders text-xs"></i>
+              <span data-i18n="votingConfig">Configure</span>
+            </button>
+            <button id="btn-consensus-vote" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg border border-slate-300 transition" data-i18n="consensusVote">Consensus Vote</button>
+            <button id="btn-toggle-results" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg border border-slate-300 transition" data-i18n="hideResults">Hide Results</button>
+            <button id="btn-reset-votes" class="px-3 py-1.5 text-rose-600 hover:bg-rose-50 rounded-lg border border-rose-200 transition flex items-center space-x-1" data-i18n="resetVotes">
+              <i class="fa-solid fa-rotate-right text-xs"></i>
+              <span>Reset</span>
+            </button>
           </div>
         </div>
 
-        <!-- Top Voting Details Card -->
+        <!-- MUN Command Dashboard Card: Four Stats + Progress Bar + Verdict -->
         <div id="card-voting-details" class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4 transition-all duration-300">
-          <div id="voting-header-row" class="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-4 gap-4 transition-all duration-300">
+          <div id="voting-header-row" class="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-4 gap-4">
             <div>
-              <span class="text-xs uppercase font-bold text-secondary" data-i18n="votingConfig">Voting Configuration</span>
               <div class="flex items-center space-x-2">
-                <h3 id="vote-resolution-title" class="text-xl font-black text-slate-800">Draft Resolution 1.1</h3>
+                <span class="text-xs uppercase tracking-wider text-slate-400" id="label-vote-type-badge">Substantive Vote</span>
+                <span class="text-slate-300">•</span>
+                <span class="text-xs text-slate-500 font-mono" id="label-vote-threshold-badge">Simple Majority</span>
+              </div>
+              <div class="flex items-center space-x-2 mt-1">
+                <h3 id="vote-resolution-title" class="text-xl text-slate-800">Draft Resolution 1.1</h3>
                 <button id="btn-edit-resolution-title" class="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-slate-600 transition" title="Edit Title">
-                  <i data-lucide="edit-3" class="w-4 h-4"></i>
+                  <i class="fa-solid fa-pen-to-square text-xs"></i>
                 </button>
               </div>
             </div>
-            <div class="flex items-center space-x-3 text-xs">
-              <span class="font-medium text-slate-500" data-i18n="majorityRule">Majority Rule:</span>
-              <select id="select-vote-threshold" class="px-3 py-1.5 border border-slate-200 rounded-lg font-bold text-slate-700">
+            <!-- Quick select threshold inside card -->
+            <div class="flex items-center space-x-2 text-xs">
+              <span class="text-slate-500" data-i18n="majorityRule">Majority Rule:</span>
+              <select id="select-vote-threshold" class="px-3 py-1.5 border border-slate-200 rounded-lg text-slate-700 bg-transparent">
                 <option value="simple">Simple Majority (50% + 1)</option>
                 <option value="twothirds">Two-Thirds Majority (2/3)</option>
                 <option value="unsc9">Security Council (9/15)</option>
+                <option value="consensus">Consensus (All Votes)</option>
               </select>
-              <button id="btn-reset-votes" class="px-3 py-1.5 text-rose-600 hover:bg-rose-50 rounded-lg font-semibold" data-i18n="resetVotes">Reset Votes</button>
             </div>
           </div>
 
           <!-- VETO ALERT BANNER -->
           <div id="veto-alert-banner" class="bg-rose-50 border-2 border-rose-300 p-4 rounded-xl flex items-center space-x-3 text-rose-800 hidden">
-            <i data-lucide="alert-octagon" class="w-7 h-7 text-rose-600 flex-shrink-0"></i>
+            <i class="fa-solid fa-triangle-exclamation text-rose-600 text-xl flex-shrink-0"></i>
             <div>
-              <div class="font-black text-sm uppercase tracking-wide text-rose-700" data-i18n="vetoTitle">Resolution Vetoed by Permanent Member(s)</div>
-              <div id="veto-countries-list" class="text-xs font-semibold text-rose-600 mt-0.5">United States, Russian Federation</div>
+              <div class="text-sm uppercase tracking-wide text-rose-700" data-i18n="vetoTitle">Resolution Vetoed by Permanent Member(s)</div>
+              <div id="veto-countries-list" class="text-xs text-rose-600 mt-0.5">United States, Russian Federation</div>
             </div>
           </div>
 
-          <!-- Live Scoreboard -->
-          <div id="voting-scoreboard" class="grid grid-cols-4 gap-3 text-center py-2 transition-opacity">
-            <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl">
-              <div class="text-xs uppercase font-bold text-emerald-700" data-i18n="inFavor">In Favor</div>
-              <div id="vote-count-favor" class="text-3xl font-black text-emerald-800 mt-1">0</div>
+          <!-- Live Scoreboard (MUN Command Dashboard: In Favor / Against / Abstaining / Majority) -->
+          <div id="voting-scoreboard" class="space-y-4">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+              <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col justify-center">
+                <div class="text-xs uppercase tracking-wider text-slate-500" data-i18n="inFavor">In Favor</div>
+                <div id="vote-count-favor" class="text-3xl text-slate-900 mt-1">0</div>
+              </div>
+              <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col justify-center">
+                <div class="text-xs uppercase tracking-wider text-slate-500" data-i18n="against">Against</div>
+                <div id="vote-count-against" class="text-3xl text-slate-900 mt-1">0</div>
+              </div>
+              <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col justify-center">
+                <div class="text-xs uppercase tracking-wider text-slate-500" data-i18n="abstaining">Abstaining</div>
+                <div id="vote-count-abstain" class="text-3xl text-slate-900 mt-1">0</div>
+              </div>
+              <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col justify-center">
+                <div class="text-xs uppercase tracking-wider text-slate-500" data-i18n="majority">Majority Required</div>
+                <div id="vote-count-majority" class="text-3xl text-slate-900 mt-1">0</div>
+              </div>
             </div>
-            <div class="bg-rose-50 border border-rose-200 p-4 rounded-xl">
-              <div class="text-xs uppercase font-bold text-rose-700" data-i18n="against">Against</div>
-              <div id="vote-count-against" class="text-3xl font-black text-rose-800 mt-1">0</div>
+
+            <!-- MUN Command Voting Percentage Progress Bar -->
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+                <span id="vote-progress-label-favor">Favor: 0%</span>
+                <span id="vote-verdict" class="text-sm tracking-wide text-slate-600">PENDING</span>
+                <span id="vote-progress-label-against">Against: 0%</span>
+              </div>
+              <div class="w-full h-3 bg-slate-200 rounded-full overflow-hidden flex">
+                <div id="bar-vote-favor" class="h-full bg-emerald-500 transition-all duration-300" style="width: 0%;"></div>
+                <div id="bar-vote-abstain" class="h-full bg-amber-400 transition-all duration-300" style="width: 0%;"></div>
+                <div id="bar-vote-against" class="h-full bg-rose-500 transition-all duration-300" style="width: 0%;"></div>
+              </div>
             </div>
-            <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl">
-              <div class="text-xs uppercase font-bold text-amber-700" data-i18n="abstaining">Abstaining</div>
-              <div id="vote-count-abstain" class="text-3xl font-black text-amber-800 mt-1">0</div>
+          </div>
+        </div>
+
+        <!-- MUN Command Active Calling Card (當前正在點名投票的國家卡片) -->
+        <div id="panel-active-voter-card" class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col items-center text-center space-y-4">
+          <div class="text-xs uppercase tracking-wider text-slate-400" id="label-active-voter-stage">Round 1 Roll Call</div>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <img id="active-voter-flag" src="" alt="Flag" class="w-16 h-11 object-cover rounded-lg shadow border border-slate-200 shrink-0">
+            <div class="text-center sm:text-left">
+              <div id="active-voter-name" class="text-2xl text-slate-800">Select or Start Voting</div>
+              <div id="active-voter-status" class="text-xs text-slate-400 mt-0.5">Present and voting</div>
             </div>
-            <div class="bg-slate-100 border border-slate-200 p-4 rounded-xl">
-              <div class="text-xs uppercase font-bold text-slate-600" data-i18n="result">Result</div>
-              <div id="vote-verdict" class="text-lg font-black text-slate-700 mt-2">PENDING</div>
+          </div>
+
+          <!-- MUN Command Primary Voting Action Buttons -->
+          <div id="active-voter-actions" class="w-full max-w-xl grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
+            <!-- Favor & Favor with Rights -->
+            <div class="flex flex-col space-y-1">
+              <button id="btn-cast-favor" type="button" class="w-full py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition">
+                贊成 (In Favor)
+              </button>
+              <button id="btn-cast-favor-rights" type="button" class="w-full py-1.5 px-2 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-[11px] transition">
+                + Rights (發言權)
+              </button>
             </div>
+            <!-- Against & Against with Rights -->
+            <div class="flex flex-col space-y-1">
+              <button id="btn-cast-against" type="button" class="w-full py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition">
+                反對 (Against)
+              </button>
+              <button id="btn-cast-against-rights" type="button" class="w-full py-1.5 px-2 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-[11px] transition">
+                + Rights (發言權)
+              </button>
+            </div>
+            <!-- Abstain -->
+            <div class="flex flex-col">
+              <button id="btn-cast-abstain" type="button" class="w-full h-full min-h-[50px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition">
+                棄權 (Abstain)
+              </button>
+            </div>
+            <!-- Pass -->
+            <div class="flex flex-col">
+              <button id="btn-cast-pass" type="button" class="w-full h-full min-h-[50px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition">
+                Pass (留至第二輪)
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-4 text-xs text-slate-400 pt-1">
+            <button id="btn-prev-voter" class="hover:text-slate-700 transition">
+              <i class="fa-solid fa-chevron-left mr-1"></i>上一個 (Previous)
+            </button>
+            <span id="label-voter-queue-status">1 / 15</span>
+            <button id="btn-next-voter" class="hover:text-slate-700 transition">
+              下一個 (Next)<i class="fa-solid fa-chevron-right ml-1"></i>
+            </button>
           </div>
         </div>
 
         <!-- Rights Speeches View -->
         <div id="panel-rights-speeches" class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hidden space-y-4">
-          <h4 class="font-bold text-slate-800 text-sm" data-i18n="rightsDelegations">Delegations with Rights Speeches</h4>
+          <div class="flex items-center justify-between border-b pb-3">
+            <h4 class="text-slate-800 text-sm" data-i18n="rightsDelegations">Delegations with Rights Speeches</h4>
+            <span class="text-xs text-slate-400">60s speech limit</span>
+          </div>
           <div id="list-rights-speeches" class="divide-y divide-slate-100">
             <!-- Injected via JS -->
           </div>
         </div>
 
-        <!-- Roll Call Vote Delegations Grid -->
+        <!-- Roll Call Vote Delegations Full Grid (可隨時手動直接點擊切換) -->
         <div id="panel-ballots-container" class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
           <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
-            <h4 class="font-bold text-slate-800 text-sm" data-i18n="rollCallBallots">Roll-Call Ballots</h4>
+            <h4 class="text-slate-800 text-sm" data-i18n="rollCallBallots">Roll-Call Ballots</h4>
+            <span class="text-xs text-slate-400" id="label-ballots-summary">點擊右側按鈕可快速修改個別代表投票</span>
           </div>
           <div id="grid-substantive-ballots" class="grid grid-cols-1 md:grid-cols-2 gap-3.5 transition-all duration-200">
             <!-- Injected via JS -->
@@ -897,6 +986,70 @@
     </div>
   </div>
 
+  <!-- Modal: Configure Voting (MUN Command Style app-setup-vote) -->
+  <div id="modal-configure-voting" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 text-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-5 border border-slate-700">
+      <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+        <h3 class="text-base text-slate-100 flex items-center space-x-2">
+          <i class="fa-solid fa-sliders text-primary"></i>
+          <span data-i18n="configureVoting">Configure Voting</span>
+        </h3>
+        <button type="button" class="btn-close-modal text-slate-400 hover:text-white p-1">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+
+      <!-- Voting Type: Procedural vs Substantive -->
+      <div class="space-y-2">
+        <label class="block text-xs uppercase tracking-wider text-slate-400">Voting Type (表決性質)</label>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="flex items-center space-x-2.5 p-3 rounded-xl border border-slate-700 bg-slate-900/50 cursor-pointer hover:border-slate-500 transition">
+            <input type="radio" name="modal-vote-type" value="substantive" class="accent-white" checked>
+            <div class="text-xs">
+              <div class="text-slate-100">Substantive (實質性)</div>
+              <div class="text-[10px] text-slate-400">可棄權、可發言權</div>
+            </div>
+          </label>
+          <label class="flex items-center space-x-2.5 p-3 rounded-xl border border-slate-700 bg-slate-900/50 cursor-pointer hover:border-slate-500 transition">
+            <input type="radio" name="modal-vote-type" value="procedural" class="accent-white">
+            <div class="text-xs">
+              <div class="text-slate-100">Procedural (程序性)</div>
+              <div class="text-[10px] text-slate-400">不可棄權</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Required Majority -->
+      <div class="space-y-2">
+        <label class="block text-xs uppercase tracking-wider text-slate-400">Required Majority (所需多數)</label>
+        <div class="space-y-2">
+          <label class="flex items-center space-x-2.5 p-2.5 rounded-xl border border-slate-700 bg-slate-900/50 cursor-pointer hover:border-slate-500 transition">
+            <input type="radio" name="modal-vote-threshold" value="simple" class="accent-white" checked>
+            <div class="text-xs text-slate-100">Simple Majority (簡單多數決 50% + 1)</div>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2.5 rounded-xl border border-slate-700 bg-slate-900/50 cursor-pointer hover:border-slate-500 transition">
+            <input type="radio" name="modal-vote-threshold" value="twothirds" class="accent-white">
+            <div class="text-xs text-slate-100">Two-Thirds Majority (三分之二絕對多數 2/3)</div>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2.5 rounded-xl border border-slate-700 bg-slate-900/50 cursor-pointer hover:border-slate-500 transition">
+            <input type="radio" name="modal-vote-threshold" value="unsc9" class="accent-white">
+            <div class="text-xs text-slate-100">Security Council (安理會 9 票 + 無常任否決)</div>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2.5 rounded-xl border border-slate-700 bg-slate-900/50 cursor-pointer hover:border-slate-500 transition">
+            <input type="radio" name="modal-vote-threshold" value="consensus" class="accent-white">
+            <div class="text-xs text-slate-100">Consensus Vote (共識決 / 無反對票)</div>
+          </label>
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-2 pt-2 border-t border-slate-700">
+        <button type="button" class="btn-close-modal px-4 py-2 border border-slate-700 hover:bg-slate-700 rounded-lg text-xs text-slate-300" data-i18n="cancel">Cancel</button>
+        <button id="btn-save-vote-config" type="button" class="px-5 py-2 bg-slate-100 hover:bg-white text-slate-900 rounded-lg text-xs font-medium transition" data-i18n="save">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal: Recess / Meeting Suspended Screen -->
   <div id="modal-recess" class="fixed inset-0 bg-slate-900/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-6 hidden">
     <div class="max-w-2xl w-full text-center space-y-6 text-white">
@@ -1002,11 +1155,11 @@
     <script src="js/views/unmod.js?v=2026092601"></script>
     <script src="js/views/single.js?v=2026092601"></script>
     <script src="js/views/motions.js?v=2026092601"></script>
-    <script src="js/views/voting.js?v=2026092604"></script>
+    <script src="js/views/voting.js?v=2026092607"></script>
     <!-- Events, Auth & Entry Point -->
-    <script src="js/events.js?v=2026092604"></script>
+    <script src="js/events.js?v=2026092607"></script>
     <script src="js/auth.js?v=2026092601"></script>
-    <script src="app.js?v=2026092601"></script>
+    <script src="app.js?v=2026092607"></script>
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();

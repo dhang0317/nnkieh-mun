@@ -128,64 +128,62 @@
     const btnRights = document.getElementById('vote-stage-rights');
     const pRights = document.getElementById('panel-rights-speeches');
     const pBallots = document.getElementById('panel-ballots-container');
+    const pActiveCard = document.getElementById('panel-active-voter-card');
 
-    [btnR1, btnR2, btnRights].forEach(b => b.className = 'px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-200');
+    [btnR1, btnR2, btnRights].forEach(b => {
+      if (b) b.className = 'px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-xs hover:bg-slate-200 transition';
+    });
     
     if (state.voteStage === 'r1') {
-      btnR1.className = 'px-3 py-1 bg-primary text-white rounded-lg text-xs font-bold shadow-sm';
-      pRights.classList.add('hidden');
-      pBallots.classList.remove('hidden');
+      if (btnR1) btnR1.className = 'px-3 py-1.5 bg-primary text-white rounded-lg text-xs transition shadow-sm';
+      if (pRights) pRights.classList.add('hidden');
+      if (pBallots) pBallots.classList.remove('hidden');
+      if (pActiveCard) pActiveCard.classList.remove('hidden');
     } else if (state.voteStage === 'r2') {
-      btnR2.className = 'px-3 py-1 bg-primary text-white rounded-lg text-xs font-bold shadow-sm';
-      pRights.classList.add('hidden');
-      pBallots.classList.remove('hidden');
+      if (btnR2) btnR2.className = 'px-3 py-1.5 bg-primary text-white rounded-lg text-xs transition shadow-sm';
+      if (pRights) pRights.classList.add('hidden');
+      if (pBallots) pBallots.classList.remove('hidden');
+      if (pActiveCard) pActiveCard.classList.remove('hidden');
     } else {
-      btnRights.className = 'px-3 py-1 bg-primary text-white rounded-lg text-xs font-bold shadow-sm';
-      pRights.classList.remove('hidden');
-      pBallots.classList.add('hidden');
+      if (btnRights) btnRights.className = 'px-3 py-1.5 bg-primary text-white rounded-lg text-xs transition shadow-sm';
+      if (pRights) pRights.classList.remove('hidden');
+      if (pBallots) pBallots.classList.add('hidden');
+      if (pActiveCard) pActiveCard.classList.add('hidden');
     }
 
     const scoreboard = document.getElementById('voting-scoreboard');
     const detailsCard = document.getElementById('card-voting-details');
     const headerRow = document.getElementById('voting-header-row');
     const t = I18N[state.language] || I18N.en;
+
     if (state.showResults) {
       if (scoreboard) {
         scoreboard.style.display = '';
         scoreboard.classList.remove('opacity-0', 'pointer-events-none');
       }
-      if (detailsCard) {
-        detailsCard.classList.remove('py-3.5', 'space-y-0');
-        detailsCard.classList.add('p-6', 'space-y-4');
-      }
-      if (headerRow) {
-        headerRow.classList.remove('border-b-0', 'pb-0');
-        headerRow.classList.add('border-b', 'pb-4');
-      }
-      document.getElementById('btn-toggle-results').textContent = t.hideResults;
+      const btnToggle = document.getElementById('btn-toggle-results');
+      if (btnToggle) btnToggle.textContent = t.hideResults || 'Hide Results';
     } else {
       if (scoreboard) {
         scoreboard.style.display = 'none';
         scoreboard.classList.add('opacity-0', 'pointer-events-none');
       }
-      if (detailsCard) {
-        detailsCard.classList.remove('p-6', 'space-y-4');
-        detailsCard.classList.add('py-3.5', 'px-6', 'space-y-0');
-      }
-      if (headerRow) {
-        headerRow.classList.remove('border-b', 'pb-4');
-        headerRow.classList.add('border-b-0', 'pb-0');
-      }
-      document.getElementById('btn-toggle-results').textContent = t.showResults;
+      const btnToggle = document.getElementById('btn-toggle-results');
+      if (btnToggle) btnToggle.textContent = t.showResults || 'Show Results';
     }
 
+    // Counts
     const favorCount = state.selectedCountries.filter(c => c.vote === 'favor').length;
     const againstCount = state.selectedCountries.filter(c => c.vote === 'against').length;
     const abstainCount = state.selectedCountries.filter(c => c.vote === 'abstain').length;
 
-    document.getElementById('vote-count-favor').textContent = favorCount;
-    document.getElementById('vote-count-against').textContent = againstCount;
-    document.getElementById('vote-count-abstain').textContent = abstainCount;
+    const elFavor = document.getElementById('vote-count-favor');
+    const elAgainst = document.getElementById('vote-count-against');
+    const elAbstain = document.getElementById('vote-count-abstain');
+    const elMajority = document.getElementById('vote-count-majority');
+    if (elFavor) elFavor.textContent = favorCount;
+    if (elAgainst) elAgainst.textContent = againstCount;
+    if (elAbstain) elAbstain.textContent = abstainCount;
 
     const titleElem = document.getElementById('vote-resolution-title');
     if (titleElem) {
@@ -197,191 +195,309 @@
       threshElem.value = state.voteThreshold || 'simple';
     }
 
-    const eligibleVoters = state.selectedCountries.filter(c => c.powerStatus !== 'observer' && (c.attendance === 'present' || c.attendance === 'pv'));
+    // Badge labels
+    const badgeType = document.getElementById('label-vote-type-badge');
+    if (badgeType) {
+      badgeType.textContent = (state.voteType === 'procedural') ? 'Procedural Vote' : 'Substantive Vote';
+    }
+    const badgeThresh = document.getElementById('label-vote-threshold-badge');
+    if (badgeThresh) {
+      const th = state.voteThreshold || 'simple';
+      badgeThresh.textContent = th === 'twothirds' ? '2/3 Majority' : (th === 'unsc9' ? 'UNSC 9 Required' : (th === 'consensus' ? 'Consensus' : 'Simple Majority'));
+    }
+
+    const eligibleVoters = state.selectedCountries.filter(c => {
+      if (state.voteType === 'procedural') {
+        return c.attendance === 'present' || c.attendance === 'pv';
+      }
+      return c.powerStatus !== 'observer' && (c.attendance === 'present' || c.attendance === 'pv');
+    });
+
     const votedCount = eligibleVoters.filter(c => c.vote === 'favor' || c.vote === 'against' || c.vote === 'abstain').length;
     const remainingToVote = eligibleVoters.length - votedCount;
 
-    const stats = computeStats();
+    // Calculate Required Majority
+    let requiredMajority = 0;
+    const substantiveVoters = favorCount + againstCount;
+    const totalPresent = eligibleVoters.length;
 
-    const vetoNations = state.selectedCountries.filter(c => c.powerStatus === 'veto' && c.vote === 'against');
-    const vetoBanner = document.getElementById('veto-alert-banner');
-    if (vetoNations.length > 0) {
-      vetoBanner.classList.remove('hidden');
-      document.getElementById('veto-countries-list').textContent = vetoNations.map(c => getCountryDisplayName(c)).join(', ');
+    if (state.voteThreshold === 'unsc9') {
+      requiredMajority = 9;
+    } else if (state.voteThreshold === 'twothirds') {
+      const base = state.voteType === 'procedural' ? totalPresent : (substantiveVoters > 0 ? substantiveVoters : totalPresent);
+      requiredMajority = Math.ceil((base * 2) / 3);
+    } else if (state.voteThreshold === 'consensus') {
+      requiredMajority = totalPresent;
     } else {
-      vetoBanner.classList.add('hidden');
+      // Simple majority
+      const base = state.voteType === 'procedural' ? totalPresent : (substantiveVoters > 0 ? substantiveVoters : totalPresent);
+      requiredMajority = Math.floor(base / 2) + 1;
     }
 
+    if (elMajority) elMajority.textContent = requiredMajority;
+
+    // Progress Bar calculations
+    const totalForBar = (favorCount + againstCount + abstainCount) || 1;
+    const favorPct = Math.round((favorCount / totalForBar) * 100);
+    const againstPct = Math.round((againstCount / totalForBar) * 100);
+    const abstainPct = Math.round((abstainCount / totalForBar) * 100);
+
+    const barFavor = document.getElementById('bar-vote-favor');
+    const barAgainst = document.getElementById('bar-vote-against');
+    const barAbstain = document.getElementById('bar-vote-abstain');
+    if (barFavor) barFavor.style.width = `${favorPct}%`;
+    if (barAgainst) barAgainst.style.width = `${againstPct}%`;
+    if (barAbstain) barAbstain.style.width = `${abstainPct}%`;
+
+    const lblFavor = document.getElementById('vote-progress-label-favor');
+    const lblAgainst = document.getElementById('vote-progress-label-against');
+    if (lblFavor) lblFavor.textContent = `Favor: ${favorPct}% (${favorCount})`;
+    if (lblAgainst) lblAgainst.textContent = `Against: ${againstPct}% (${againstCount})`;
+
+    // Veto Detection
+    const vetoNations = state.selectedCountries.filter(c => c.powerStatus === 'veto' && c.vote === 'against');
+    const vetoBanner = document.getElementById('veto-alert-banner');
+    if (vetoBanner) {
+      if (vetoNations.length > 0 && state.voteType !== 'procedural') {
+        vetoBanner.classList.remove('hidden');
+        const listEl = document.getElementById('veto-countries-list');
+        if (listEl) listEl.textContent = vetoNations.map(c => getCountryDisplayName(c)).join(', ');
+      } else {
+        vetoBanner.classList.add('hidden');
+      }
+    }
+
+    // Verdict calculation
     const verdictElem = document.getElementById('vote-verdict');
     const totalVotesCast = favorCount + againstCount + abstainCount;
 
-    if (totalVotesCast === 0) {
-      verdictElem.textContent = t.pending;
-      verdictElem.className = 'text-lg font-black text-slate-500 mt-2';
-    } else if (vetoNations.length > 0) {
-      verdictElem.textContent = t.vetoed;
-      verdictElem.className = 'text-lg font-black text-rose-600 mt-2';
-    } else if (state.voteThreshold === 'unsc9') {
-      const requiredThreshold = 9;
-      if (favorCount >= requiredThreshold) {
-        verdictElem.textContent = t.passed;
-        verdictElem.className = 'text-lg font-black text-emerald-600 mt-2';
-      } else if (favorCount + remainingToVote < requiredThreshold) {
-        verdictElem.textContent = t.failed;
-        verdictElem.className = 'text-lg font-black text-rose-600 mt-2';
-      } else {
-        verdictElem.textContent = t.inProgress;
-        verdictElem.className = 'text-lg font-black text-amber-500 mt-2';
-      }
-    } else if (state.voteThreshold === 'twothirds') {
-      if (remainingToVote > 0) {
-        // Still votes remaining
-        verdictElem.textContent = t.inProgress;
-        verdictElem.className = 'text-lg font-black text-amber-500 mt-2';
-      } else {
-        // All eligible members have voted: MUN 2/3 requires favor >= 2/3 of (favor + against)
-        const substantiveTotal = favorCount + againstCount;
-        const required = substantiveTotal > 0 ? Math.ceil((substantiveTotal * 2) / 3) : 1;
-        if (favorCount > 0 && favorCount >= required) {
-          verdictElem.textContent = t.passed;
-          verdictElem.className = 'text-lg font-black text-emerald-600 mt-2';
+    if (verdictElem) {
+      if (totalVotesCast === 0) {
+        verdictElem.textContent = t.pending || 'PENDING';
+      } else if (vetoNations.length > 0 && state.voteType !== 'procedural') {
+        verdictElem.textContent = (t.vetoed || 'RESOLUTION VETOED').toUpperCase();
+      } else if (state.voteThreshold === 'consensus') {
+        if (againstCount > 0) {
+          verdictElem.textContent = (t.failed || 'OBJECTION RAISED - FAILED').toUpperCase();
+        } else if (remainingToVote === 0 && favorCount > 0) {
+          verdictElem.textContent = (t.passed || 'ADOPTED BY CONSENSUS').toUpperCase();
         } else {
-          verdictElem.textContent = t.failed;
-          verdictElem.className = 'text-lg font-black text-rose-600 mt-2';
+          verdictElem.textContent = (t.inProgress || 'VOTING IN PROGRESS').toUpperCase();
         }
-      }
-    } else {
-      // Simple majority (簡單多數決)
-      // Standard MUN rule: "Members present and voting" means favor or against.
-      // Resolution passes if Favor > Against.
-      if (remainingToVote > 0) {
-        // If remaining delegates cannot possibly change favor > against even if all vote against:
-        // However, while voting is actively taking place, show in-progress unless complete.
-        if (favorCount > againstCount + remainingToVote) {
-          verdictElem.textContent = t.passed;
-          verdictElem.className = 'text-lg font-black text-emerald-600 mt-2';
-        } else if (favorCount + remainingToVote <= againstCount) {
-          verdictElem.textContent = t.failed;
-          verdictElem.className = 'text-lg font-black text-rose-600 mt-2';
+      } else if (state.voteThreshold === 'unsc9') {
+        if (favorCount >= 9) {
+          verdictElem.textContent = (t.passed || 'PASSED').toUpperCase();
+        } else if (favorCount + remainingToVote < 9) {
+          verdictElem.textContent = (t.failed || 'FAILED').toUpperCase();
         } else {
-          verdictElem.textContent = t.inProgress;
-          verdictElem.className = 'text-lg font-black text-amber-500 mt-2';
+          verdictElem.textContent = (t.inProgress || 'VOTING IN PROGRESS').toUpperCase();
         }
-      } else {
-        // Voting complete
-        if (favorCount > againstCount) {
-          verdictElem.textContent = t.passed;
-          verdictElem.className = 'text-lg font-black text-emerald-600 mt-2';
+      } else if (state.voteThreshold === 'twothirds') {
+        if (remainingToVote > 0) {
+          verdictElem.textContent = (t.inProgress || 'VOTING IN PROGRESS').toUpperCase();
         } else {
-          verdictElem.textContent = t.failed;
-          verdictElem.className = 'text-lg font-black text-rose-600 mt-2';
-        }
-      }
-    }
-
-    const rightsContainer = document.getElementById('list-rights-speeches');
-    rightsContainer.innerHTML = '';
-    const rightsDelegations = state.selectedCountries.filter(c => c.hasRights);
-    if (rightsDelegations.length === 0) {
-      rightsContainer.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">${t.noRightsInRound}</div>`;
-    } else {
-      rightsDelegations.forEach(c => {
-        const item = document.createElement('div');
-        item.className = 'py-3 flex items-center justify-between';
-        item.innerHTML = `
-          <div class="flex items-center space-x-3">
-            <img src="${getFlagUrl(c)}" class="w-6 h-4 object-cover rounded shadow-sm">
-            <div>
-              <span class="text-xs font-bold text-slate-800">${getCountryDisplayName(c)}</span>
-              <span class="text-[10px] text-primary font-bold block">${t.voting}: ${c.vote.toUpperCase()}</span>
-            </div>
-          </div>
-          <button class="px-3 py-1 bg-secondary text-white rounded-lg text-xs font-semibold hover:bg-cyan-600">${t.giveFloor60s}</button>
-        `;
-        item.querySelector('button').addEventListener('click', () => {
-          state.singleSpeaker = c;
-          state.singleTimeRemaining = 60;
-          switchTab('singleSpeaker');
-        });
-        rightsContainer.appendChild(item);
-      });
-    }
-
-    const grid = document.getElementById('grid-substantive-ballots');
-    grid.innerHTML = '';
-
-    let visibleCountries = state.selectedCountries;
-    if (state.voteStage === 'r2') {
-      visibleCountries = state.selectedCountries.filter(c => c.vote === 'pass');
-      if (visibleCountries.length === 0) {
-        grid.innerHTML = `<div class="col-span-full p-8 text-center text-xs text-slate-400">${t.noPassInRound1}</div>`;
-        return;
-      }
-    }
-
-    visibleCountries.forEach(c => {
-      const isObserver = c.powerStatus === 'observer';
-      const isAbsent = c.attendance === 'absent';
-      const isUncalled = c.attendance === 'uncalled' || !c.attendance;
-      const canAbstain = c.attendance !== 'pv';
-
-      const card = document.createElement('div');
-      card.className = 'p-4 sm:p-5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between gap-3 shadow-sm';
-
-      const statusText = isObserver 
-        ? t.observer 
-        : (c.attendance === 'pv' 
-            ? t.pv 
-            : (c.attendance === 'present' 
-                ? t.present 
-                : (c.attendance === 'absent' ? t.absent : (t.uncalled || '未點名'))));
-
-      card.innerHTML = `
-        <div class="flex items-center space-x-3.5 min-w-0 flex-1">
-          <img src="${getFlagUrl(c)}" class="w-9 h-6 sm:w-11 sm:h-7 object-cover rounded-md shadow-sm border border-slate-700/30 shrink-0">
-          <div class="min-w-0">
-            <div class="country-name-text text-base sm:text-lg lg:text-xl font-black text-slate-800 leading-snug truncate">${getCountryDisplayName(c)}</div>
-            <div class="text-xs text-slate-400 font-medium">${statusText}</div>
-          </div>
-        </div>
-        ${
-          isObserver || isAbsent || isUncalled
-          ? `<span class="text-xs text-slate-400 italic">${isObserver ? t.observer : (isAbsent ? t.absent : (t.uncalled || '未點名'))}</span>`
-          : `
-            <div class="flex items-center space-x-1">
-              <button data-vote="favor" class="btn-vote-choice px-2 py-1 rounded text-xs font-bold ${c.vote === 'favor' && !c.hasRights ? 'vote-favor' : 'border'}">${t.yes}</button>
-              <button data-vote="favor-rights" class="btn-vote-choice px-1.5 py-1 rounded text-[10px] font-bold ${c.vote === 'favor' && c.hasRights ? 'vote-favor' : 'border'}" title="In Favor with Rights">+R</button>
-              
-              <button data-vote="against" class="btn-vote-choice px-2 py-1 rounded text-xs font-bold ${c.vote === 'against' && !c.hasRights ? 'vote-against' : 'border'}">${t.no}</button>
-              <button data-vote="against-rights" class="btn-vote-choice px-1.5 py-1 rounded text-[10px] font-bold ${c.vote === 'against' && c.hasRights ? 'vote-against' : 'border'}" title="Against with Rights">+R</button>
-
-              ${canAbstain ? `<button data-vote="abstain" class="btn-vote-choice px-2 py-1 rounded text-xs font-bold ${c.vote === 'abstain' ? 'vote-abstain' : 'border'}">${t.abs}</button>` : ''}
-              
-              ${state.voteStage === 'r1' ? `<button data-vote="pass" class="btn-vote-choice px-2 py-1 rounded text-xs font-bold ${c.vote === 'pass' ? 'vote-pass' : 'border'}">${t.pass}</button>` : ''}
-            </div>
-          `
-        }
-      `;
-
-      card.querySelectorAll('.btn-vote-choice').forEach(btn => {
-        btn.addEventListener('click', () => {
-          if (state.isViewerMode) return;
-          const action = btn.getAttribute('data-vote');
-          if (action === 'favor-rights') {
-            c.vote = 'favor';
-            c.hasRights = true;
-          } else if (action === 'against-rights') {
-            c.vote = 'against';
-            c.hasRights = true;
+          if (favorCount > 0 && favorCount >= requiredMajority) {
+            verdictElem.textContent = (t.passed || 'PASSED').toUpperCase();
           } else {
-            c.vote = action;
-            c.hasRights = false;
+            verdictElem.textContent = (t.failed || 'FAILED').toUpperCase();
           }
-          saveToLocalStorage(true, true);
-          renderAll();
-        });
-      });
+        }
+      } else {
+        // Simple majority
+        if (remainingToVote > 0) {
+          if (favorCount > againstCount + remainingToVote) {
+            verdictElem.textContent = (t.passed || 'PASSED').toUpperCase();
+          } else if (favorCount + remainingToVote <= againstCount) {
+            verdictElem.textContent = (t.failed || 'FAILED').toUpperCase();
+          } else {
+            verdictElem.textContent = (t.inProgress || 'VOTING IN PROGRESS').toUpperCase();
+          }
+        } else {
+          if (favorCount > againstCount) {
+            verdictElem.textContent = (t.passed || 'PASSED').toUpperCase();
+          } else {
+            verdictElem.textContent = (t.failed || 'FAILED').toUpperCase();
+          }
+        }
+      }
+    }
 
-      grid.appendChild(card);
-    });
+    // Rights Speeches list rendering
+    const rightsContainer = document.getElementById('list-rights-speeches');
+    if (rightsContainer) {
+      rightsContainer.innerHTML = '';
+      const rightsDelegations = state.selectedCountries.filter(c => c.hasRights);
+      if (rightsDelegations.length === 0) {
+        rightsContainer.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">${t.noRightsInRound || 'No delegates have requested rights speeches in this round.'}</div>`;
+      } else {
+        rightsDelegations.forEach(c => {
+          const item = document.createElement('div');
+          item.className = 'py-3 flex items-center justify-between';
+          item.innerHTML = `
+            <div class="flex items-center space-x-3">
+              <img src="${getFlagUrl(c)}" class="w-7 h-5 object-cover rounded shadow-sm border border-slate-700/30">
+              <div>
+                <span class="text-xs text-slate-800">${getCountryDisplayName(c)}</span>
+                <span class="text-[10px] text-primary block">${t.voting || 'Vote'}: ${(c.vote || '').toUpperCase()}</span>
+              </div>
+            </div>
+            <button class="px-3 py-1 bg-secondary text-white rounded-lg text-xs hover:bg-cyan-600 transition">${t.giveFloor60s || 'Give Floor (60s)'}</button>
+          `;
+          item.querySelector('button').addEventListener('click', () => {
+            state.singleSpeaker = c;
+            state.singleTimeRemaining = 60;
+            switchTab('singleSpeaker');
+          });
+          rightsContainer.appendChild(item);
+        });
+      }
+    }
+
+    // Determine candidate pool for the active caller card and list
+    let pool = eligibleVoters;
+    if (state.voteStage === 'r2') {
+      pool = eligibleVoters.filter(c => c.vote === 'pass');
+    }
+
+    // Keep active voter index within bounds
+    if (typeof state.activeVoterIndex !== 'number' || state.activeVoterIndex < 0) {
+      state.activeVoterIndex = 0;
+    }
+    if (pool.length > 0 && state.activeVoterIndex >= pool.length) {
+      state.activeVoterIndex = pool.length - 1;
+    }
+
+    // Render MUN Command Active Voter Card
+    const currentVoter = pool[state.activeVoterIndex] || null;
+    const flagEl = document.getElementById('active-voter-flag');
+    const nameEl = document.getElementById('active-voter-name');
+    const statusEl = document.getElementById('active-voter-status');
+    const queueEl = document.getElementById('label-voter-queue-status');
+    const stageLabel = document.getElementById('label-active-voter-stage');
+
+    if (stageLabel) {
+      stageLabel.textContent = state.voteStage === 'r2' ? 'Round 2 Roll Call (Passes)' : 'Round 1 Roll Call';
+    }
+
+    if (currentVoter) {
+      if (flagEl) flagEl.src = getFlagUrl(currentVoter);
+      if (nameEl) nameEl.textContent = getCountryDisplayName(currentVoter);
+      if (statusEl) {
+        const voteTxt = currentVoter.vote && currentVoter.vote !== 'none' 
+          ? `Current: ${currentVoter.vote.toUpperCase()}${currentVoter.hasRights ? ' (+Rights)' : ''}` 
+          : (currentVoter.attendance === 'pv' ? 'Present and voting (No Abstain)' : 'Present');
+        statusEl.textContent = voteTxt;
+      }
+      if (queueEl) queueEl.textContent = `${state.activeVoterIndex + 1} / ${pool.length}`;
+    } else {
+      if (flagEl) flagEl.src = '';
+      if (nameEl) nameEl.textContent = pool.length === 0 && state.voteStage === 'r2' ? 'No delegates passed in Round 1' : 'All votes recorded';
+      if (statusEl) statusEl.textContent = pool.length === 0 ? '' : 'Voting complete';
+      if (queueEl) queueEl.textContent = `0 / 0`;
+    }
+
+    // Pass and Abstain availability on Active Card
+    const btnPass = document.getElementById('btn-cast-pass');
+    if (btnPass) {
+      // In Round 2, delegates cannot pass again
+      btnPass.disabled = state.voteStage === 'r2' || !currentVoter;
+      btnPass.style.opacity = (state.voteStage === 'r2' || !currentVoter) ? '0.4' : '1';
+    }
+    const btnAbstain = document.getElementById('btn-cast-abstain');
+    if (btnAbstain) {
+      const isPv = currentVoter && currentVoter.attendance === 'pv';
+      const isProcedural = state.voteType === 'procedural';
+      btnAbstain.disabled = !currentVoter || isPv || isProcedural;
+      btnAbstain.style.opacity = (!currentVoter || isPv || isProcedural) ? '0.4' : '1';
+    }
+
+    // Render Full Roll Call Ballots Grid
+    const grid = document.getElementById('grid-substantive-ballots');
+    if (grid) {
+      grid.innerHTML = '';
+      let visibleCountries = state.selectedCountries;
+      if (state.voteStage === 'r2') {
+        visibleCountries = state.selectedCountries.filter(c => c.vote === 'pass');
+        if (visibleCountries.length === 0) {
+          grid.innerHTML = `<div class="col-span-full p-8 text-center text-xs text-slate-400">${t.noPassInRound1 || 'No delegates voted pass in Round 1'}</div>`;
+          return;
+        }
+      }
+
+      visibleCountries.forEach(c => {
+        const isObserver = c.powerStatus === 'observer';
+        const isAbsent = c.attendance === 'absent';
+        const isUncalled = c.attendance === 'uncalled' || !c.attendance;
+        const canAbstain = c.attendance !== 'pv' && state.voteType !== 'procedural';
+
+        const card = document.createElement('div');
+        card.className = 'p-4 sm:p-5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between gap-3 shadow-sm transition';
+
+        const statusText = isObserver 
+          ? t.observer 
+          : (c.attendance === 'pv' 
+              ? t.pv 
+              : (c.attendance === 'present' 
+                  ? t.present 
+                  : (c.attendance === 'absent' ? t.absent : (t.uncalled || '未點名'))));
+
+        card.innerHTML = `
+          <div class="flex items-center space-x-3.5 min-w-0 flex-1">
+            <img src="${getFlagUrl(c)}" class="w-9 h-6 sm:w-11 sm:h-7 object-cover rounded-md shadow-sm border border-slate-700/30 shrink-0">
+            <div class="min-w-0">
+              <div class="country-name-text text-base sm:text-lg lg:text-xl text-slate-800 leading-snug truncate">${getCountryDisplayName(c)}</div>
+              <div class="text-xs text-slate-400">${statusText}</div>
+            </div>
+          </div>
+          ${
+            (isObserver && state.voteType !== 'procedural') || isAbsent || isUncalled
+            ? `<span class="text-xs text-slate-400">${isObserver ? t.observer : (isAbsent ? t.absent : (t.uncalled || '未點名'))}</span>`
+            : `
+              <div class="flex items-center space-x-1">
+                <button data-vote="favor" class="btn-vote-choice px-2.5 py-1 rounded text-xs ${c.vote === 'favor' && !c.hasRights ? 'vote-favor' : 'border'}">${t.yes || '贊成'}</button>
+                <button data-vote="favor-rights" class="btn-vote-choice px-1.5 py-1 rounded text-[10px] ${c.vote === 'favor' && c.hasRights ? 'vote-favor' : 'border'}" title="In Favor with Rights">+R</button>
+                
+                <button data-vote="against" class="btn-vote-choice px-2.5 py-1 rounded text-xs ${c.vote === 'against' && !c.hasRights ? 'vote-against' : 'border'}">${t.no || '反對'}</button>
+                <button data-vote="against-rights" class="btn-vote-choice px-1.5 py-1 rounded text-[10px] ${c.vote === 'against' && c.hasRights ? 'vote-against' : 'border'}" title="Against with Rights">+R</button>
+
+                ${canAbstain ? `<button data-vote="abstain" class="btn-vote-choice px-2 py-1 rounded text-xs ${c.vote === 'abstain' ? 'vote-abstain' : 'border'}">${t.abs || '棄權'}</button>` : ''}
+                
+                ${state.voteStage === 'r1' ? `<button data-vote="pass" class="btn-vote-choice px-2 py-1 rounded text-xs ${c.vote === 'pass' ? 'vote-pass' : 'border'}">${t.pass || 'Pass'}</button>` : ''}
+              </div>
+            `
+          }
+        `;
+
+        card.querySelectorAll('.btn-vote-choice').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (state.isViewerMode) return;
+            const action = btn.getAttribute('data-vote');
+            if (action === 'favor-rights') {
+              c.vote = 'favor';
+              c.hasRights = true;
+            } else if (action === 'against-rights') {
+              c.vote = 'against';
+              c.hasRights = true;
+            } else {
+              c.vote = action;
+              c.hasRights = false;
+            }
+            saveToLocalStorage(true, true);
+            renderAll();
+          });
+        });
+
+        // Clicking country row sets it as the active caller card
+        card.addEventListener('click', () => {
+          const idx = pool.indexOf(c);
+          if (idx !== -1) {
+            state.activeVoterIndex = idx;
+            renderResolutionVoteGrid();
+          }
+        });
+
+        grid.appendChild(card);
+      });
+    }
   }

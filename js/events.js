@@ -616,6 +616,111 @@
       });
     });
 
+    // Voting Mode & Configure Modal Handlers
+    const modalConfigureVote = document.getElementById('modal-configure-voting');
+    const btnConfigureVote = document.getElementById('btn-configure-vote');
+    if (btnConfigureVote && modalConfigureVote) {
+      btnConfigureVote.addEventListener('click', () => {
+        // Init radio values
+        const typeRadios = modalConfigureVote.querySelectorAll('input[name="modal-vote-type"]');
+        typeRadios.forEach(r => {
+          r.checked = (r.value === (state.voteType || 'substantive'));
+        });
+        const threshRadios = modalConfigureVote.querySelectorAll('input[name="modal-vote-threshold"]');
+        threshRadios.forEach(r => {
+          r.checked = (r.value === (state.voteThreshold || 'simple'));
+        });
+        modalConfigureVote.classList.remove('hidden');
+      });
+    }
+
+    const btnSaveVoteConfig = document.getElementById('btn-save-vote-config');
+    if (btnSaveVoteConfig && modalConfigureVote) {
+      btnSaveVoteConfig.addEventListener('click', () => {
+        const checkedType = modalConfigureVote.querySelector('input[name="modal-vote-type"]:checked');
+        if (checkedType) state.voteType = checkedType.value;
+        const checkedThresh = modalConfigureVote.querySelector('input[name="modal-vote-threshold"]:checked');
+        if (checkedThresh) state.voteThreshold = checkedThresh.value;
+        modalConfigureVote.classList.add('hidden');
+        saveToLocalStorage(true, true);
+        renderResolutionVoteGrid();
+      });
+    }
+
+    // Helper function to advance to next voter in pool
+    function castVoteForActiveVoter(voteVal, hasRightsVal) {
+      if (state.isViewerMode) return;
+      const eligible = state.selectedCountries.filter(c => {
+        if (state.voteType === 'procedural') {
+          return c.attendance === 'present' || c.attendance === 'pv';
+        }
+        return c.powerStatus !== 'observer' && (c.attendance === 'present' || c.attendance === 'pv');
+      });
+      const pool = state.voteStage === 'r2' ? eligible.filter(c => c.vote === 'pass') : eligible;
+      const idx = state.activeVoterIndex || 0;
+      const voter = pool[idx];
+      if (voter) {
+        voter.vote = voteVal;
+        voter.hasRights = !!hasRightsVal;
+        // Advance to next voter
+        if (idx < pool.length - 1) {
+          state.activeVoterIndex = idx + 1;
+        }
+        saveToLocalStorage(true, true);
+        renderResolutionVoteGrid();
+      }
+    }
+
+    const btnCastFavor = document.getElementById('btn-cast-favor');
+    if (btnCastFavor) {
+      btnCastFavor.addEventListener('click', () => castVoteForActiveVoter('favor', false));
+    }
+    const btnCastFavorRights = document.getElementById('btn-cast-favor-rights');
+    if (btnCastFavorRights) {
+      btnCastFavorRights.addEventListener('click', () => castVoteForActiveVoter('favor', true));
+    }
+    const btnCastAgainst = document.getElementById('btn-cast-against');
+    if (btnCastAgainst) {
+      btnCastAgainst.addEventListener('click', () => castVoteForActiveVoter('against', false));
+    }
+    const btnCastAgainstRights = document.getElementById('btn-cast-against-rights');
+    if (btnCastAgainstRights) {
+      btnCastAgainstRights.addEventListener('click', () => castVoteForActiveVoter('against', true));
+    }
+    const btnCastAbstain = document.getElementById('btn-cast-abstain');
+    if (btnCastAbstain) {
+      btnCastAbstain.addEventListener('click', () => castVoteForActiveVoter('abstain', false));
+    }
+    const btnCastPass = document.getElementById('btn-cast-pass');
+    if (btnCastPass) {
+      btnCastPass.addEventListener('click', () => castVoteForActiveVoter('pass', false));
+    }
+    const btnPrevVoter = document.getElementById('btn-prev-voter');
+    if (btnPrevVoter) {
+      btnPrevVoter.addEventListener('click', () => {
+        if (typeof state.activeVoterIndex === 'number' && state.activeVoterIndex > 0) {
+          state.activeVoterIndex--;
+          renderResolutionVoteGrid();
+        }
+      });
+    }
+    const btnNextVoter = document.getElementById('btn-next-voter');
+    if (btnNextVoter) {
+      btnNextVoter.addEventListener('click', () => {
+        const eligible = state.selectedCountries.filter(c => {
+          if (state.voteType === 'procedural') {
+            return c.attendance === 'present' || c.attendance === 'pv';
+          }
+          return c.powerStatus !== 'observer' && (c.attendance === 'present' || c.attendance === 'pv');
+        });
+        const pool = state.voteStage === 'r2' ? eligible.filter(c => c.vote === 'pass') : eligible;
+        if (typeof state.activeVoterIndex === 'number' && state.activeVoterIndex < pool.length - 1) {
+          state.activeVoterIndex++;
+          renderResolutionVoteGrid();
+        }
+      });
+    }
+
     document.getElementById('btn-toggle-results').addEventListener('click', () => {
       state.showResults = !state.showResults;
       saveToLocalStorage(true, true);

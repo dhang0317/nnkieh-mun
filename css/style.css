@@ -7,6 +7,10 @@
   font-style: normal;
   font-display: swap;
 }
+    /* 全域文字一律正常字重（無粗體） */
+    *, *::before, *::after {
+      font-weight: 400 !important;
+    }
     body, button, input, select, textarea, span, p, h1, h2, h3, h4, h5, h6, div, a, label {
       font-family: 'Iansui', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif !important;
       font-weight: 400 !important;
@@ -17,7 +21,7 @@
       font-weight: 400 !important;
       font-style: normal !important;
     }
-    /* Ensure FontAwesome icons keep their icon font */
+    /* Ensure FontAwesome icons keep their icon font, but not heavy text */
     .fa, .fas, .far, .fal, .fad, .fab, [class*="fa-"] {
       font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", sans-serif !important;
       font-style: normal !important;
@@ -29,17 +33,24 @@
     .italic, em {
       font-style: normal !important;
     }
+    /* 全頁面文字顏色規範：深色模式純白、淺色模式純黑 */
     body:not(.light-mode) {
       user-select: none;
       -webkit-user-select: none;
       background-color: #000000 !important;
       color: #ffffff !important;
     }
+    body:not(.light-mode) *:not(i):not(svg):not(path) {
+      color: #ffffff !important;
+    }
     body.light-mode {
       user-select: none;
       -webkit-user-select: none;
       background-color: #f8fafc !important;
-      color: #0f172a !important;
+      color: #000000 !important;
+    }
+    body.light-mode *:not(i):not(svg):not(path) {
+      color: #000000 !important;
     }
     .custom-scroll::-webkit-scrollbar {
       width: 6px;
@@ -1351,120 +1362,169 @@
     }
 
     /* =========================================================
-       ROLL CALL BUTTON COLORS - CLEAN NEUTRAL TEXT (NO GREEN/RED TEXT)
+       ROLL CALL BUTTON COLORS - CLEAN NEUTRAL TEXT (BLACK OR WHITE ONLY)
        ========================================================= */
-    /* 未點名 - 出席按鈕：綠色邊框與半透明綠色背景 (rgba(16, 185, 129, 0.15))，文字為翡翠綠 */
-    body:not(.light-mode) .btn-rollcall-present,
-    body.light-mode .btn-rollcall-present,
-    .btn-rollcall-present {
-      border: 1.5px solid #10b981 !important;
-      color: #10b981 !important;
-      background-color: rgba(16, 185, 129, 0.15) !important;
-      background: rgba(16, 185, 129, 0.15) !important;
-    }
-    body:not(.light-mode) .btn-rollcall-present:hover,
-    body.light-mode .btn-rollcall-present:hover,
-    .btn-rollcall-present:hover {
-      background-color: rgba(16, 185, 129, 0.3) !important;
-      background: rgba(16, 185, 129, 0.3) !important;
-      color: #34d399 !important;
-      border-color: #34d399 !important;
-    }
+     /* 未點名 - 出席按鈕：綠色邊框與半透明綠色背景 (rgba(16, 185, 129, 0.15))，文字為白/黑 */
+     body:not(.light-mode) .btn-rollcall-present,
+     .btn-rollcall-present {
+       border: 1.5px solid #10b981 !important;
+       color: #ffffff !important;
+       background-color: rgba(16, 185, 129, 0.15) !important;
+       background: rgba(16, 185, 129, 0.15) !important;
+     }
+     body.light-mode .btn-rollcall-present {
+       border: 1.5px solid #10b981 !important;
+       color: #000000 !important;
+       background-color: rgba(16, 185, 129, 0.15) !important;
+       background: rgba(16, 185, 129, 0.15) !important;
+     }
+     body:not(.light-mode) .btn-rollcall-present:hover {
+       background-color: rgba(16, 185, 129, 0.3) !important;
+       background: rgba(16, 185, 129, 0.3) !important;
+       color: #ffffff !important;
+       border-color: #34d399 !important;
+     }
+     body.light-mode .btn-rollcall-present:hover {
+       background-color: rgba(16, 185, 129, 0.3) !important;
+       background: rgba(16, 185, 129, 0.3) !important;
+       color: #000000 !important;
+       border-color: #10b981 !important;
+     }
 
-    /* 未點名 - 缺席按鈕：紅色邊框與半透明紅色背景 (rgba(239, 68, 68, 0.15))，文字為鮮紅色 */
-    body:not(.light-mode) .btn-rollcall-absent,
-    body.light-mode .btn-rollcall-absent,
-    .btn-rollcall-absent {
-      border: 1.5px solid #ef4444 !important;
-      color: #ef4444 !important;
-      background-color: rgba(239, 68, 68, 0.15) !important;
-      background: rgba(239, 68, 68, 0.15) !important;
-    }
-    body:not(.light-mode) .btn-rollcall-absent:hover,
-    body.light-mode .btn-rollcall-absent:hover,
-    .btn-rollcall-absent:hover {
-      background-color: rgba(239, 68, 68, 0.3) !important;
-      background: rgba(239, 68, 68, 0.3) !important;
-      color: #f87171 !important;
-      border-color: #f87171 !important;
-    }
+     /* 未點名 - 缺席按鈕：紅色邊框與半透明紅色背景 (rgba(239, 68, 68, 0.15))，文字為白/黑 */
+     body:not(.light-mode) .btn-rollcall-absent,
+     .btn-rollcall-absent {
+       border: 1.5px solid #ef4444 !important;
+       color: #ffffff !important;
+       background-color: rgba(239, 68, 68, 0.15) !important;
+       background: rgba(239, 68, 68, 0.15) !important;
+     }
+     body.light-mode .btn-rollcall-absent {
+       border: 1.5px solid #ef4444 !important;
+       color: #000000 !important;
+       background-color: rgba(239, 68, 68, 0.15) !important;
+       background: rgba(239, 68, 68, 0.15) !important;
+     }
+     body:not(.light-mode) .btn-rollcall-absent:hover {
+       background-color: rgba(239, 68, 68, 0.3) !important;
+       background: rgba(239, 68, 68, 0.3) !important;
+       color: #ffffff !important;
+       border-color: #f87171 !important;
+     }
+     body.light-mode .btn-rollcall-absent:hover {
+       background-color: rgba(239, 68, 68, 0.3) !important;
+       background: rgba(239, 68, 68, 0.3) !important;
+       color: #000000 !important;
+       border-color: #ef4444 !important;
+     }
 
-    /* 點選後單一展開按鈕共通基礎 */
-    body:not(.light-mode) .btn-rollcall-expanded,
-    body.light-mode .btn-rollcall-expanded,
-    .btn-rollcall-expanded {
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
-      outline: none !important;
-      cursor: pointer !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      font-weight: 900 !important;
-      transition: all 0.2s ease !important;
-    }
+     /* 點選後單一展開按鈕共通基礎 */
+     body:not(.light-mode) .btn-rollcall-expanded,
+     body.light-mode .btn-rollcall-expanded,
+     .btn-rollcall-expanded {
+       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+       outline: none !important;
+       cursor: pointer !important;
+       display: inline-flex !important;
+       align-items: center !important;
+       justify-content: center !important;
+       font-weight: 400 !important;
+       transition: all 0.2s ease !important;
+     }
 
-    /* 1. 按下去變成半透明綠色 (出席)：透亮半透明綠底 + 鮮明綠邊框 + 綠色文字 */
-    body:not(.light-mode) .btn-rollcall-status-present,
-    body.light-mode .btn-rollcall-status-present,
-    .btn-rollcall-status-present {
-      background-color: rgba(16, 185, 129, 0.28) !important;
-      background: rgba(16, 185, 129, 0.28) !important;
-      color: #10b981 !important;
-      border: 2px solid #10b981 !important;
-    }
-    body:not(.light-mode) .btn-rollcall-status-present:hover,
-    body.light-mode .btn-rollcall-status-present:hover,
-    .btn-rollcall-status-present:hover {
-      background-color: rgba(16, 185, 129, 0.4) !important;
-      background: rgba(16, 185, 129, 0.4) !important;
-      border-color: #34d399 !important;
-      color: #34d399 !important;
-      transform: scale(1.02);
-    }
+     /* 1. 按下去變成半透明綠色 (出席)：透亮半透明綠底 + 鮮明綠邊框 + 白/黑文字 */
+     body:not(.light-mode) .btn-rollcall-status-present,
+     .btn-rollcall-status-present {
+       background-color: rgba(16, 185, 129, 0.28) !important;
+       background: rgba(16, 185, 129, 0.28) !important;
+       color: #ffffff !important;
+       border: 2px solid #10b981 !important;
+     }
+     body.light-mode .btn-rollcall-status-present {
+       background-color: rgba(16, 185, 129, 0.28) !important;
+       background: rgba(16, 185, 129, 0.28) !important;
+       color: #000000 !important;
+       border: 2px solid #10b981 !important;
+     }
+     body:not(.light-mode) .btn-rollcall-status-present:hover {
+       background-color: rgba(16, 185, 129, 0.4) !important;
+       background: rgba(16, 185, 129, 0.4) !important;
+       border-color: #34d399 !important;
+       color: #ffffff !important;
+       transform: scale(1.02);
+     }
+     body.light-mode .btn-rollcall-status-present:hover {
+       background-color: rgba(16, 185, 129, 0.4) !important;
+       background: rgba(16, 185, 129, 0.4) !important;
+       border-color: #10b981 !important;
+       color: #000000 !important;
+       transform: scale(1.02);
+     }
 
-    /* 2. 再按變成 PV (出席且投票)：透亮半透明琥珀金底 + 琥珀色邊框 + 金色文字 */
-    body:not(.light-mode) .btn-rollcall-status-pv,
-    body.light-mode .btn-rollcall-status-pv,
-    .btn-rollcall-status-pv {
-      background-color: rgba(245, 158, 11, 0.28) !important;
-      background: rgba(245, 158, 11, 0.28) !important;
-      color: #f59e0b !important;
-      border: 2px solid #f59e0b !important;
-    }
-    body:not(.light-mode) .btn-rollcall-status-pv:hover,
-    body.light-mode .btn-rollcall-status-pv:hover,
-    .btn-rollcall-status-pv:hover {
-      background-color: rgba(245, 158, 11, 0.4) !important;
-      background: rgba(245, 158, 11, 0.4) !important;
-      border-color: #fbbf24 !important;
-      color: #fbbf24 !important;
-      transform: scale(1.02);
-    }
+     /* 2. 再按變成 PV (出席且投票)：透亮半透明琥珀金底 + 琥珀色邊框 + 白/黑文字 */
+     body:not(.light-mode) .btn-rollcall-status-pv,
+     .btn-rollcall-status-pv {
+       background-color: rgba(245, 158, 11, 0.28) !important;
+       background: rgba(245, 158, 11, 0.28) !important;
+       color: #ffffff !important;
+       border: 2px solid #f59e0b !important;
+     }
+     body.light-mode .btn-rollcall-status-pv {
+       background-color: rgba(245, 158, 11, 0.28) !important;
+       background: rgba(245, 158, 11, 0.28) !important;
+       color: #000000 !important;
+       border: 2px solid #f59e0b !important;
+     }
+     body:not(.light-mode) .btn-rollcall-status-pv:hover {
+       background-color: rgba(245, 158, 11, 0.4) !important;
+       background: rgba(245, 158, 11, 0.4) !important;
+       border-color: #fbbf24 !important;
+       color: #ffffff !important;
+       transform: scale(1.02);
+     }
+     body.light-mode .btn-rollcall-status-pv:hover {
+       background-color: rgba(245, 158, 11, 0.4) !important;
+       background: rgba(245, 158, 11, 0.4) !important;
+       border-color: #f59e0b !important;
+       color: #000000 !important;
+       transform: scale(1.02);
+     }
 
-    /* 3. 按下去變成半透明紅色 (缺席)：透亮半透明紅底 + 紅色邊框 + 紅色文字 */
-    body:not(.light-mode) .btn-rollcall-status-absent,
-    body.light-mode .btn-rollcall-status-absent,
-    .btn-rollcall-status-absent {
-      background-color: rgba(239, 68, 68, 0.28) !important;
-      background: rgba(239, 68, 68, 0.28) !important;
-      color: #ef4444 !important;
-      border: 2px solid #ef4444 !important;
-    }
-    body:not(.light-mode) .btn-rollcall-status-absent:hover,
-    body.light-mode .btn-rollcall-status-absent:hover,
-    .btn-rollcall-status-absent:hover {
-      background-color: rgba(239, 68, 68, 0.4) !important;
-      background: rgba(239, 68, 68, 0.4) !important;
-      border-color: #f87171 !important;
-      color: #f87171 !important;
-      transform: scale(1.02);
-    }
+     /* 3. 按下去變成半透明紅色 (缺席)：透亮半透明紅底 + 紅色邊框 + 白/黑文字 */
+     body:not(.light-mode) .btn-rollcall-status-absent,
+     .btn-rollcall-status-absent {
+       background-color: rgba(239, 68, 68, 0.28) !important;
+       background: rgba(239, 68, 68, 0.28) !important;
+       color: #ffffff !important;
+       border: 2px solid #ef4444 !important;
+     }
+     body.light-mode .btn-rollcall-status-absent {
+       background-color: rgba(239, 68, 68, 0.28) !important;
+       background: rgba(239, 68, 68, 0.28) !important;
+       color: #000000 !important;
+       border: 2px solid #ef4444 !important;
+     }
+     body:not(.light-mode) .btn-rollcall-status-absent:hover {
+       background-color: rgba(239, 68, 68, 0.4) !important;
+       background: rgba(239, 68, 68, 0.4) !important;
+       border-color: #f87171 !important;
+       color: #ffffff !important;
+       transform: scale(1.02);
+     }
+     body.light-mode .btn-rollcall-status-absent:hover {
+       background-color: rgba(239, 68, 68, 0.4) !important;
+       background: rgba(239, 68, 68, 0.4) !important;
+       border-color: #ef4444 !important;
+       color: #000000 !important;
+       transform: scale(1.02);
+     }
 
     /* 投票階段按鈕 (1st Round / 2nd Round / Rights Speeches) 在深色與淺色模式下的高對比清晰呈現 */
     #vote-stage-r1,
     #vote-stage-r2,
     #vote-stage-rights {
       border: 1px solid #3f3f46 !important;
+      font-weight: 400 !important;
       transition: all 0.2s ease !important;
     }
     body:not(.light-mode) #vote-stage-r1.bg-primary,
@@ -1473,7 +1533,7 @@
       background-color: #ffffff !important;
       color: #000000 !important;
       border-color: #ffffff !important;
-      font-weight: 900 !important;
+      font-weight: 400 !important;
     }
     body:not(.light-mode) #vote-stage-r1.bg-slate-100,
     body:not(.light-mode) #vote-stage-r2.bg-slate-100,
@@ -1481,6 +1541,7 @@
       background-color: rgba(255, 255, 255, 0.08) !important;
       color: #a1a1aa !important;
       border-color: #3f3f46 !important;
+      font-weight: 400 !important;
     }
     body.light-mode #vote-stage-r1.bg-primary,
     body.light-mode #vote-stage-r2.bg-primary,
@@ -1488,7 +1549,7 @@
       background-color: #0f172a !important;
       color: #ffffff !important;
       border-color: #0f172a !important;
-      font-weight: 900 !important;
+      font-weight: 400 !important;
     }
     body.light-mode #vote-stage-r1.bg-slate-100,
     body.light-mode #vote-stage-r2.bg-slate-100,
@@ -1496,6 +1557,7 @@
       background-color: #f1f5f9 !important;
       color: #475569 !important;
       border-color: #cbd5e1 !important;
+      font-weight: 400 !important;
     }
 
     /* Clean & Modern Navigation Tabs (書籤列樣式整理) */
