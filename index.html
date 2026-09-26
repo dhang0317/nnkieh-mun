@@ -37,7 +37,7 @@
       }
     }
   </script>
-  <link rel="stylesheet" href="css/style.css?v=2026092612">
+  <link rel="stylesheet" href="css/style.css?v=2026092613">
 </head>
 <body class="h-screen w-screen flex flex-col overflow-hidden bg-black">
 
@@ -202,14 +202,15 @@
 
     <!-- 2. GSL VIEW (/tabs/gsl) -->
     <div id="view-gsl" class="view-panel absolute inset-0 overflow-y-auto p-4 sm:p-6 bg-slate-50 custom-scroll hidden">
-      <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- Left: Current Speaker & Big Timer -->
-        <div class="lg:col-span-2 space-y-6">
+        <!-- Left: Current Speaker & Big Timer (7 cols on lg) -->
+        <div class="lg:col-span-7 space-y-6">
           <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 text-center relative overflow-hidden">
             <div class="flex items-center justify-between border-b pb-3 mb-6">
               <span class="text-xs uppercase tracking-wider font-bold text-slate-400" data-i18n="currentSpeaker">Current Speaker</span>
-              <button id="btn-gsl-set-time" class="text-xs text-primary hover:underline font-semibold flex items-center space-x-1">
+              <button id="btn-gsl-set-time" class="text-xs text-primary hover:underline font-semibold flex items-center space-x-1.5">
+                <i class="fa-solid fa-clock text-xs"></i>
                 <span id="label-gsl-default-time">90s</span>
               </button>
             </div>
@@ -217,7 +218,6 @@
             <!-- Country Banner (Selected Speaker or Empty State) -->
             <div id="gsl-current-empty" class="py-6 text-slate-400">
               <p class="text-base font-bold text-slate-600 dark:text-slate-300" data-i18n="noSpeakerFloor">No speaker on the floor</p>
-              <p class="text-xs text-slate-400 mt-1" data-i18n="selectSpeakerNotice">Select a country from upcoming speakers or click Next Speaker</p>
             </div>
 
             <div id="gsl-current-active" class="hidden py-4">
@@ -238,19 +238,22 @@
               </div>
             </div>
 
-            <!-- Timer Controls (Always visible) -->
+            <!-- Timer Controls (Always visible with FontAwesome icons) -->
             <div class="flex items-center justify-center space-x-3 pt-2">
               <button id="btn-gsl-start" class="px-6 py-3 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl shadow transition flex items-center space-x-2">
+                <i class="fa-solid fa-play text-sm"></i>
                 <span data-i18n="start">Start</span>
               </button>
               <button id="btn-gsl-pause" class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow transition flex items-center space-x-2 hidden">
+                <i class="fa-solid fa-pause text-sm"></i>
                 <span data-i18n="pause">Pause</span>
               </button>
-              <button id="btn-gsl-reset" class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition" data-i18n="reset">
-                Reset
+              <button id="btn-gsl-reset" class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition flex items-center space-x-1.5" data-i18n="reset" title="Reset">
+                <i class="fa-solid fa-rotate-left text-sm"></i>
               </button>
               <button id="btn-gsl-next" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow transition flex items-center space-x-2">
                 <span data-i18n="nextSpeaker">Next Speaker</span>
+                <i class="fa-solid fa-forward-step text-sm"></i>
               </button>
             </div>
 
@@ -258,23 +261,33 @@
             <div id="gsl-yield-options" class="border-t border-slate-100 pt-5 mt-4">
               <div class="text-xs font-semibold text-slate-400 mb-2" data-i18n="yieldRemaining">YIELD TIME REMAINING</div>
               <div class="flex flex-wrap items-center justify-center gap-2">
-                <button id="btn-yield-chair" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold" data-i18n="yieldChair">Yield to the Chair</button>
-                <button id="btn-yield-delegate" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold" data-i18n="yieldDelegate">Yield to another Delegate</button>
-                <button id="btn-yield-questions" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold" data-i18n="yieldQuestions">Yield to Questions</button>
+                <button id="btn-yield-chair" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex items-center space-x-1.5">
+                  <i class="fa-solid fa-gavel text-xs"></i>
+                  <span data-i18n="yieldChair">Yield to the Chair</span>
+                </button>
+                <button id="btn-yield-delegate" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex items-center space-x-1.5">
+                  <i class="fa-solid fa-users text-xs"></i>
+                  <span data-i18n="yieldDelegate">Yield to another Delegate</span>
+                </button>
+                <button id="btn-yield-questions" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex items-center space-x-1.5">
+                  <i class="fa-solid fa-circle-question text-xs"></i>
+                  <span data-i18n="yieldQuestions">Yield to Questions</span>
+                </button>
               </div>
             </div>
 
           </div>
         </div>
 
-        <!-- Right: Speakers Queue -->
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col h-[560px]">
+        <!-- Right: Speakers Queue (5 cols on lg, wider and comfortable) -->
+        <div class="lg:col-span-5 bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col h-[560px]">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
               <h3 class="font-bold text-slate-800 text-base" data-i18n="upcomingSpeakers">Upcoming Speakers</h3>
               <span id="badge-queue-count" class="text-xs text-slate-400">0 queued</span>
             </div>
-            <button id="btn-open-add-speaker" class="px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-semibold hover:bg-primary-dark flex items-center space-x-1">
+            <button id="btn-open-add-speaker" class="px-3.5 py-1.5 bg-primary text-white rounded-lg text-xs font-semibold hover:bg-primary-dark flex items-center space-x-1.5">
+              <i class="fa-solid fa-user-plus text-xs"></i>
               <span data-i18n="addSpeaker">Add Speaker</span>
             </button>
           </div>
@@ -760,14 +773,6 @@
         </div>
       </button>
 
-      <!-- 2.2 Delegate QR Code Button inside Drawer -->
-      <button id="drawer-btn-qrcode" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition border">
-        <div class="flex items-center space-x-3">
-          <i class="fa-solid fa-qrcode text-lg text-primary"></i>
-          <span data-i18n="qrCodeJoin">代表加入 QR Code</span>
-        </div>
-        <span class="text-xs text-zinc-400">QR Code</span>
-      </button>
 
       <!-- 2.3 Global Content Scale Slider inside Drawer -->
       <div id="container-global-scale" class="w-full px-4 py-3 rounded-xl font-medium text-sm transition border flex flex-col space-y-2">
@@ -837,50 +842,7 @@
 
   <!-- ================= MODALS & POPUPS ================= -->
   
-  <!-- Modal: Delegate QR Code Join (View-Only) -->
-  <div id="modal-qrcode-join" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fade-in">
-    <div class="bg-zinc-950 text-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl space-y-5 border border-zinc-800 text-center relative">
-      <div class="flex items-center justify-between pb-3 border-b border-zinc-800/80">
-        <div class="flex items-center space-x-2 text-left">
-          <i class="fa-solid fa-qrcode text-xl text-primary"></i>
-          <div>
-            <h3 class="font-bold text-base text-zinc-100" data-i18n="qrCodeModalTitle">代表掃描加入 (僅限觀看)</h3>
-            <span class="text-[11px] text-zinc-400 font-medium">即時同步議程、計時器、點名與表決看板</span>
-          </div>
-        </div>
-        <button id="btn-close-qrcode-modal" class="p-1.5 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 rounded-lg transition"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-
-      <!-- QR Code Display Box -->
-      <div class="py-2 flex flex-col items-center justify-center space-y-4">
-        <div class="p-4 bg-white rounded-2xl shadow-xl border border-zinc-200 inline-block">
-          <div id="qrcode-container" class="flex items-center justify-center min-w-[200px] min-h-[200px]"></div>
-        </div>
-        <div class="text-xs text-zinc-400 max-w-xs leading-relaxed" data-i18n="qrCodeModalDesc">
-          代表可使用手機掃描此 QR Code，即可在手機上同步即時查看目前發言者、計時器、點名出席狀態與表決結果，但無編輯與操作權限。
-        </div>
-      </div>
-
-      <!-- Room Details & Copy Link -->
-      <div class="bg-zinc-900/80 rounded-2xl p-4 border border-zinc-800 text-left space-y-2.5">
-        <div class="flex items-center justify-between text-xs">
-          <span class="text-zinc-400 font-medium" data-i18n="roomCodeLabel">會議房間代碼</span>
-          <span id="label-qrcode-room" class="font-mono font-bold text-primary tracking-wider px-2 py-0.5 rounded bg-zinc-800 border border-zinc-700">---</span>
-        </div>
-        <div class="flex items-center space-x-2 pt-1">
-          <input id="input-qrcode-link" type="text" readonly class="flex-1 bg-black border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-300 font-mono focus:outline-none select-all truncate">
-          <button id="btn-copy-qrcode-link" type="button" class="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shrink-0 shadow">
-            <i class="fa-solid fa-copy"></i>
-            <span data-i18n="copyLink">複製連結</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="text-[11px] text-zinc-500 text-center">
-        💡 代表掃描後畫面將隨主席台即時自動連動，完全不需主席手動分享簡報。
-      </div>
-    </div>
-  </div>
+  <!-- Modal: Delegate QR Code Join (Removed as requested) -->
 
   <!-- Modal: Add Speaker to Queue -->
   <div id="modal-add-speaker" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
@@ -1141,7 +1103,7 @@
   <!-- Load Extracted Data & App Logic -->
   <!-- Application Data & Translations -->
     <script src="data.js?v=2026092502"></script>
-    <script src="js/i18n.js?v=2026092608"></script>
+    <script src="js/i18n.js?v=2026092613"></script>
     <script src="js/countries.js?v=2026092502"></script>
     <script src="js/state.js?v=2026092608"></script>
     <!-- Utilities, Dialogs & Visual Effects -->
@@ -1153,16 +1115,16 @@
     <!-- View Renderers -->
     <script src="js/views/header.js?v=2026092601"></script>
     <script src="js/views/setup.js?v=2026092601"></script>
-    <script src="js/views/gsl.js?v=2026092611"></script>
+    <script src="js/views/gsl.js?v=2026092613"></script>
     <script src="js/views/mod.js?v=2026092611"></script>
     <script src="js/views/unmod.js?v=2026092601"></script>
     <script src="js/views/single.js?v=2026092601"></script>
     <script src="js/views/motions.js?v=2026092611"></script>
     <script src="js/views/voting.js?v=2026092611"></script>
     <!-- Events, Auth & Entry Point -->
-    <script src="js/events.js?v=2026092611"></script>
+    <script src="js/events.js?v=2026092613"></script>
     <script src="js/auth.js?v=2026092601"></script>
-    <script src="app.js?v=2026092611"></script>
+    <script src="app.js?v=2026092613"></script>
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
