@@ -37,7 +37,7 @@
     const queueList = document.getElementById('list-mod-queue');
     queueList.innerHTML = '';
     if (state.modQueue.length === 0) {
-      queueList.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">${t.noSpeakersQueued}</div>`;
+      queueList.innerHTML = '';
     } else {
       state.modQueue.forEach((c, idx) => {
         const item = document.createElement('div');

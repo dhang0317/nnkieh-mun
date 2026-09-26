@@ -359,7 +359,7 @@
       rightsContainer.innerHTML = '';
       const rightsDelegations = state.selectedCountries.filter(c => c.hasRights);
       if (rightsDelegations.length === 0) {
-        rightsContainer.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">${t.noRightsInRound || 'No delegates have requested rights speeches in this round.'}</div>`;
+        rightsContainer.innerHTML = '';
       } else {
         rightsDelegations.forEach(c => {
           const item = document.createElement('div');
@@ -512,7 +512,7 @@
       if (state.voteStage === 'r2') {
         visibleCountries = state.selectedCountries.filter(c => c.vote === 'pass');
         if (visibleCountries.length === 0) {
-          grid.innerHTML = `<div class="col-span-full p-8 text-center text-xs text-slate-400">${t.noPassInRound1 || 'No delegates voted pass in Round 1'}</div>`;
+          grid.innerHTML = '';
           return;
         }
       }

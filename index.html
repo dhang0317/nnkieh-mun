@@ -210,7 +210,7 @@
             <div class="flex items-center justify-between border-b pb-3 mb-6">
               <span class="text-xs uppercase tracking-wider font-bold text-slate-400" data-i18n="currentSpeaker">Current Speaker</span>
               <button id="btn-gsl-set-time" class="text-xs text-primary hover:underline font-semibold flex items-center space-x-1">
-                <span id="label-gsl-default-time">Default: 90s</span>
+                <span id="label-gsl-default-time">90s</span>
               </button>
             </div>
 
@@ -704,7 +704,7 @@
         <div id="panel-ballots-container" class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
           <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
             <h4 class="text-slate-800 text-sm" data-i18n="rollCallBallots">Roll-Call Ballots</h4>
-            <span class="text-xs text-slate-400" id="label-ballots-summary" data-i18n="ballotsSummaryHint">點擊右側按鈕可快速修改個別代表投票</span>
+            <span class="text-xs text-slate-400" id="label-ballots-summary"></span>
           </div>
           <div id="grid-substantive-ballots" class="grid grid-cols-1 md:grid-cols-2 gap-3.5 transition-all duration-200">
             <!-- Injected via JS -->
@@ -1153,16 +1153,16 @@
     <!-- View Renderers -->
     <script src="js/views/header.js?v=2026092601"></script>
     <script src="js/views/setup.js?v=2026092601"></script>
-    <script src="js/views/gsl.js?v=2026092601"></script>
-    <script src="js/views/mod.js?v=2026092601"></script>
+    <script src="js/views/gsl.js?v=2026092611"></script>
+    <script src="js/views/mod.js?v=2026092611"></script>
     <script src="js/views/unmod.js?v=2026092601"></script>
     <script src="js/views/single.js?v=2026092601"></script>
-    <script src="js/views/motions.js?v=2026092601"></script>
-    <script src="js/views/voting.js?v=2026092610"></script>
+    <script src="js/views/motions.js?v=2026092611"></script>
+    <script src="js/views/voting.js?v=2026092611"></script>
     <!-- Events, Auth & Entry Point -->
-    <script src="js/events.js?v=2026092610"></script>
+    <script src="js/events.js?v=2026092611"></script>
     <script src="js/auth.js?v=2026092601"></script>
-    <script src="app.js?v=2026092610"></script>
+    <script src="app.js?v=2026092611"></script>
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();

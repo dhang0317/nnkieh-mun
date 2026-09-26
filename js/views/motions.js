@@ -11,7 +11,7 @@
 
     if (state.motions.length === 0) {
       heroCard.classList.add('hidden');
-      listContainer.innerHTML = `<div class="p-8 text-center text-xs text-slate-400">${t.noMotionsOnFloor}</div>`;
+      listContainer.innerHTML = '';
       return;
     }
 

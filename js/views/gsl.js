@@ -2,7 +2,7 @@
     const emptyDiv = document.getElementById('gsl-current-empty');
     const activeDiv = document.getElementById('gsl-current-active');
     const t = I18N[state.language] || I18N.en;
-    document.getElementById('label-gsl-default-time').textContent = `Default: ${state.gslDefaultTime}s`;
+    document.getElementById('label-gsl-default-time').textContent = `${state.gslDefaultTime}s`;
 
     const stats = computeStats();
     if (stats.presentCount === 0 && state.selectedCountries.length > 0) {
@@ -55,7 +55,7 @@
     const queueList = document.getElementById('list-gsl-queue');
     queueList.innerHTML = '';
     if (state.gslQueue.length === 0) {
-      queueList.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">${t.queueEmpty}</div>`;
+      queueList.innerHTML = '';
     } else {
       state.gslQueue.forEach((c, idx) => {
         const item = document.createElement('div');
