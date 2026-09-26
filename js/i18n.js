@@ -223,7 +223,9 @@ window.I18N = {
       viewerModeBadge: "Delegate Live View (Read-Only)",
       roomCodeLabel: "Room Code",
       projectorWindow: "Projector Window",
-      globalScale: "Interface Scale"
+      globalScale: "Interface Scale",
+      subtabBallots: "Ballots (Overview)",
+      subtabRollcall: "ROLLCALL VOTING"
     },
     zh: {
       sessionActive: "會議進行中",
@@ -449,7 +451,9 @@ window.I18N = {
       viewerModeBadge: "代表即時同步檢視中 (唯讀)",
       roomCodeLabel: "會議房間代碼",
       projectorWindow: "投影大螢幕",
-      globalScale: "介面縮放"
+      globalScale: "介面縮放",
+      subtabBallots: "名冊總覽 (Ballots)",
+      subtabRollcall: "唱票輪次 (ROLLCALL VOTING)"
     },
     fr: {
       sessionActive: "Session Active",

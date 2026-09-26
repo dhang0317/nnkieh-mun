@@ -647,8 +647,26 @@
       });
     }
 
-    // Helper function to advance to next voter in pool
-    function castVoteForActiveVoter(voteVal, hasRightsVal) {
+    // Voting Subtabs Switching (Ballots vs Rollcall Calling Card)
+    const btnSubtabBallots = document.getElementById('btn-voting-subtab-ballots');
+    if (btnSubtabBallots) {
+      btnSubtabBallots.addEventListener('click', () => {
+        state.votingSubtab = 'ballots';
+        saveToLocalStorage(true, true);
+        renderResolutionVoteGrid();
+      });
+    }
+    const btnSubtabRollcall = document.getElementById('btn-voting-subtab-rollcall');
+    if (btnSubtabRollcall) {
+      btnSubtabRollcall.addEventListener('click', () => {
+        state.votingSubtab = 'rollcall';
+        saveToLocalStorage(true, true);
+        renderResolutionVoteGrid();
+      });
+    }
+
+    // Helper function for active voter buttons with PV-style cycle
+    function handleActiveVoterChoice(action) {
       if (state.isViewerMode) return;
       const eligible = state.selectedCountries.filter(c => {
         if (state.voteType === 'procedural') {
@@ -659,41 +677,63 @@
       const pool = state.voteStage === 'r2' ? eligible.filter(c => c.vote === 'pass') : eligible;
       const idx = state.activeVoterIndex || 0;
       const voter = pool[idx];
-      if (voter) {
-        voter.vote = voteVal;
-        voter.hasRights = !!hasRightsVal;
-        // Advance to next voter
-        if (idx < pool.length - 1) {
-          state.activeVoterIndex = idx + 1;
+      if (!voter) return;
+
+      if (action === 'favor') {
+        if (voter.vote === 'favor' && !voter.hasRights) {
+          voter.hasRights = true;
+        } else if (voter.vote === 'favor' && voter.hasRights) {
+          voter.vote = 'none';
+          voter.hasRights = false;
+        } else {
+          voter.vote = 'favor';
+          voter.hasRights = false;
         }
-        saveToLocalStorage(true, true);
-        renderResolutionVoteGrid();
+      } else if (action === 'against') {
+        if (voter.vote === 'against' && !voter.hasRights) {
+          voter.hasRights = true;
+        } else if (voter.vote === 'against' && voter.hasRights) {
+          voter.vote = 'none';
+          voter.hasRights = false;
+        } else {
+          voter.vote = 'against';
+          voter.hasRights = false;
+        }
+      } else if (action === 'abstain') {
+        if (voter.vote === 'abstain') {
+          voter.vote = 'none';
+        } else {
+          voter.vote = 'abstain';
+        }
+        voter.hasRights = false;
+      } else if (action === 'pass') {
+        if (voter.vote === 'pass') {
+          voter.vote = 'none';
+        } else {
+          voter.vote = 'pass';
+        }
+        voter.hasRights = false;
       }
+
+      saveToLocalStorage(true, true);
+      renderResolutionVoteGrid();
     }
 
     const btnCastFavor = document.getElementById('btn-cast-favor');
     if (btnCastFavor) {
-      btnCastFavor.addEventListener('click', () => castVoteForActiveVoter('favor', false));
-    }
-    const btnCastFavorRights = document.getElementById('btn-cast-favor-rights');
-    if (btnCastFavorRights) {
-      btnCastFavorRights.addEventListener('click', () => castVoteForActiveVoter('favor', true));
+      btnCastFavor.addEventListener('click', () => handleActiveVoterChoice('favor'));
     }
     const btnCastAgainst = document.getElementById('btn-cast-against');
     if (btnCastAgainst) {
-      btnCastAgainst.addEventListener('click', () => castVoteForActiveVoter('against', false));
-    }
-    const btnCastAgainstRights = document.getElementById('btn-cast-against-rights');
-    if (btnCastAgainstRights) {
-      btnCastAgainstRights.addEventListener('click', () => castVoteForActiveVoter('against', true));
+      btnCastAgainst.addEventListener('click', () => handleActiveVoterChoice('against'));
     }
     const btnCastAbstain = document.getElementById('btn-cast-abstain');
     if (btnCastAbstain) {
-      btnCastAbstain.addEventListener('click', () => castVoteForActiveVoter('abstain', false));
+      btnCastAbstain.addEventListener('click', () => handleActiveVoterChoice('abstain'));
     }
     const btnCastPass = document.getElementById('btn-cast-pass');
     if (btnCastPass) {
-      btnCastPass.addEventListener('click', () => castVoteForActiveVoter('pass', false));
+      btnCastPass.addEventListener('click', () => handleActiveVoterChoice('pass'));
     }
     const btnPrevVoter = document.getElementById('btn-prev-voter');
     if (btnPrevVoter) {

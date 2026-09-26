@@ -55,6 +55,7 @@
 
     // Voting
     voteMode: 'rollcall',
+    votingSubtab: 'ballots', // 'ballots' (default overview grid) or 'rollcall' (calling card)
     voteStage: 'r1',
     voteResolutionTitle: 'Draft Resolution 1.1',
     voteThreshold: 'simple',

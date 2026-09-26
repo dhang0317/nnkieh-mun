@@ -129,7 +129,26 @@
     const pRights = document.getElementById('panel-rights-speeches');
     const pBallots = document.getElementById('panel-ballots-container');
     const pActiveCard = document.getElementById('panel-active-voter-card');
+    const btnSubtabBallots = document.getElementById('btn-voting-subtab-ballots');
+    const btnSubtabRollcall = document.getElementById('btn-voting-subtab-rollcall');
 
+    // Default votingSubtab is ballots
+    if (!state.votingSubtab) {
+      state.votingSubtab = 'ballots';
+    }
+
+    // Update Subtab button styling
+    if (btnSubtabBallots && btnSubtabRollcall) {
+      if (state.votingSubtab === 'ballots') {
+        btnSubtabBallots.className = 'px-3 py-1.5 rounded-lg text-xs transition bg-white shadow-sm text-slate-800';
+        btnSubtabRollcall.className = 'px-3 py-1.5 rounded-lg text-xs transition text-slate-600 hover:text-slate-900';
+      } else {
+        btnSubtabBallots.className = 'px-3 py-1.5 rounded-lg text-xs transition text-slate-600 hover:text-slate-900';
+        btnSubtabRollcall.className = 'px-3 py-1.5 rounded-lg text-xs transition bg-white shadow-sm text-slate-800';
+      }
+    }
+
+    // Stage button styles
     [btnR1, btnR2, btnRights].forEach(b => {
       if (b) b.className = 'px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-xs hover:bg-slate-200 transition';
     });
@@ -137,13 +156,23 @@
     if (state.voteStage === 'r1') {
       if (btnR1) btnR1.className = 'px-3 py-1.5 bg-primary text-white rounded-lg text-xs transition shadow-sm';
       if (pRights) pRights.classList.add('hidden');
-      if (pBallots) pBallots.classList.remove('hidden');
-      if (pActiveCard) pActiveCard.classList.remove('hidden');
+      if (state.votingSubtab === 'rollcall') {
+        if (pBallots) pBallots.classList.add('hidden');
+        if (pActiveCard) pActiveCard.classList.remove('hidden');
+      } else {
+        if (pBallots) pBallots.classList.remove('hidden');
+        if (pActiveCard) pActiveCard.classList.add('hidden');
+      }
     } else if (state.voteStage === 'r2') {
       if (btnR2) btnR2.className = 'px-3 py-1.5 bg-primary text-white rounded-lg text-xs transition shadow-sm';
       if (pRights) pRights.classList.add('hidden');
-      if (pBallots) pBallots.classList.remove('hidden');
-      if (pActiveCard) pActiveCard.classList.remove('hidden');
+      if (state.votingSubtab === 'rollcall') {
+        if (pBallots) pBallots.classList.add('hidden');
+        if (pActiveCard) pActiveCard.classList.remove('hidden');
+      } else {
+        if (pBallots) pBallots.classList.remove('hidden');
+        if (pActiveCard) pActiveCard.classList.add('hidden');
+      }
     } else {
       if (btnRights) btnRights.className = 'px-3 py-1.5 bg-primary text-white rounded-lg text-xs transition shadow-sm';
       if (pRights) pRights.classList.remove('hidden');
@@ -397,18 +426,66 @@
     }
 
     // Pass and Abstain availability on Active Card
+    const btnFavor = document.getElementById('btn-cast-favor');
+    const btnAgainst = document.getElementById('btn-cast-against');
     const btnPass = document.getElementById('btn-cast-pass');
+    const btnAbstain = document.getElementById('btn-cast-abstain');
+
+    if (btnFavor) {
+      btnFavor.disabled = !currentVoter;
+      const isFavor = currentVoter && currentVoter.vote === 'favor';
+      const hasR = currentVoter && currentVoter.hasRights;
+      if (isFavor && hasR) {
+        btnFavor.textContent = '贊成 (+Rights)';
+        btnFavor.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-emerald-500 bg-emerald-500/20 text-xs transition font-normal';
+      } else if (isFavor) {
+        btnFavor.textContent = '贊成 (Favor)';
+        btnFavor.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-emerald-400 bg-emerald-500/10 text-xs transition font-normal';
+      } else {
+        btnFavor.textContent = '贊成 (Favor)';
+        btnFavor.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition font-normal';
+      }
+    }
+
+    if (btnAgainst) {
+      btnAgainst.disabled = !currentVoter;
+      const isAgainst = currentVoter && currentVoter.vote === 'against';
+      const hasR = currentVoter && currentVoter.hasRights;
+      if (isAgainst && hasR) {
+        btnAgainst.textContent = '反對 (+Rights)';
+        btnAgainst.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-rose-500 bg-rose-500/20 text-xs transition font-normal';
+      } else if (isAgainst) {
+        btnAgainst.textContent = '反對 (Against)';
+        btnAgainst.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-rose-400 bg-rose-500/10 text-xs transition font-normal';
+      } else {
+        btnAgainst.textContent = '反對 (Against)';
+        btnAgainst.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition font-normal';
+      }
+    }
+
     if (btnPass) {
       // In Round 2, delegates cannot pass again
       btnPass.disabled = state.voteStage === 'r2' || !currentVoter;
       btnPass.style.opacity = (state.voteStage === 'r2' || !currentVoter) ? '0.4' : '1';
+      const isPass = currentVoter && currentVoter.vote === 'pass';
+      if (isPass) {
+        btnPass.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-400 bg-slate-300 text-xs transition font-normal';
+      } else {
+        btnPass.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition font-normal';
+      }
     }
-    const btnAbstain = document.getElementById('btn-cast-abstain');
+
     if (btnAbstain) {
       const isPv = currentVoter && currentVoter.attendance === 'pv';
       const isProcedural = state.voteType === 'procedural';
       btnAbstain.disabled = !currentVoter || isPv || isProcedural;
       btnAbstain.style.opacity = (!currentVoter || isPv || isProcedural) ? '0.4' : '1';
+      const isAbstain = currentVoter && currentVoter.vote === 'abstain';
+      if (isAbstain) {
+        btnAbstain.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-amber-400 bg-amber-500/20 text-xs transition font-normal';
+      } else {
+        btnAbstain.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition font-normal';
+      }
     }
 
     // Render Full Roll Call Ballots Grid
@@ -441,6 +518,9 @@
                   ? t.present 
                   : (c.attendance === 'absent' ? t.absent : (t.uncalled || '未點名'))));
 
+        const favorLabel = (c.vote === 'favor' && c.hasRights) ? `${t.yes || '贊成'} (+R)` : (t.yes || '贊成');
+        const againstLabel = (c.vote === 'against' && c.hasRights) ? `${t.no || '反對'} (+R)` : (t.no || '反對');
+
         card.innerHTML = `
           <div class="flex items-center space-x-3.5 min-w-0 flex-1">
             <img src="${getFlagUrl(c)}" class="w-9 h-6 sm:w-11 sm:h-7 object-cover rounded-md shadow-sm border border-slate-700/30 shrink-0">
@@ -453,16 +533,11 @@
             (isObserver && state.voteType !== 'procedural') || isAbsent || isUncalled
             ? `<span class="text-xs text-slate-400">${isObserver ? t.observer : (isAbsent ? t.absent : (t.uncalled || '未點名'))}</span>`
             : `
-              <div class="flex items-center space-x-1">
-                <button data-vote="favor" class="btn-vote-choice px-2.5 py-1 rounded text-xs ${c.vote === 'favor' && !c.hasRights ? 'vote-favor' : 'border'}">${t.yes || '贊成'}</button>
-                <button data-vote="favor-rights" class="btn-vote-choice px-1.5 py-1 rounded text-[10px] ${c.vote === 'favor' && c.hasRights ? 'vote-favor' : 'border'}" title="In Favor with Rights">+R</button>
-                
-                <button data-vote="against" class="btn-vote-choice px-2.5 py-1 rounded text-xs ${c.vote === 'against' && !c.hasRights ? 'vote-against' : 'border'}">${t.no || '反對'}</button>
-                <button data-vote="against-rights" class="btn-vote-choice px-1.5 py-1 rounded text-[10px] ${c.vote === 'against' && c.hasRights ? 'vote-against' : 'border'}" title="Against with Rights">+R</button>
-
-                ${canAbstain ? `<button data-vote="abstain" class="btn-vote-choice px-2 py-1 rounded text-xs ${c.vote === 'abstain' ? 'vote-abstain' : 'border'}">${t.abs || '棄權'}</button>` : ''}
-                
-                ${state.voteStage === 'r1' ? `<button data-vote="pass" class="btn-vote-choice px-2 py-1 rounded text-xs ${c.vote === 'pass' ? 'vote-pass' : 'border'}">${t.pass || 'Pass'}</button>` : ''}
+              <div class="flex items-center space-x-1.5">
+                <button data-vote="favor" class="btn-vote-choice px-3 py-1.5 rounded-lg text-xs transition ${c.vote === 'favor' ? (c.hasRights ? 'vote-favor ring-2 ring-emerald-500' : 'vote-favor') : 'border'}">${favorLabel}</button>
+                <button data-vote="against" class="btn-vote-choice px-3 py-1.5 rounded-lg text-xs transition ${c.vote === 'against' ? (c.hasRights ? 'vote-against ring-2 ring-rose-500' : 'vote-against') : 'border'}">${againstLabel}</button>
+                ${canAbstain ? `<button data-vote="abstain" class="btn-vote-choice px-2.5 py-1.5 rounded-lg text-xs transition ${c.vote === 'abstain' ? 'vote-abstain' : 'border'}">${t.abs || '棄權'}</button>` : ''}
+                ${state.voteStage === 'r1' ? `<button data-vote="pass" class="btn-vote-choice px-2.5 py-1.5 rounded-lg text-xs transition ${c.vote === 'pass' ? 'vote-pass' : 'border'}">${t.pass || 'Pass'}</button>` : ''}
               </div>
             `
           }
@@ -473,16 +548,48 @@
             e.stopPropagation();
             if (state.isViewerMode) return;
             const action = btn.getAttribute('data-vote');
-            if (action === 'favor-rights') {
-              c.vote = 'favor';
-              c.hasRights = true;
-            } else if (action === 'against-rights') {
-              c.vote = 'against';
-              c.hasRights = true;
-            } else {
-              c.vote = action;
+            
+            // PV-style cycle logic:
+            // favor -> favor+rights -> reset (none)
+            // against -> against+rights -> reset (none)
+            // abstain -> reset (none)
+            // pass -> reset (none)
+            if (action === 'favor') {
+              if (c.vote === 'favor' && !c.hasRights) {
+                c.hasRights = true;
+              } else if (c.vote === 'favor' && c.hasRights) {
+                c.vote = 'none';
+                c.hasRights = false;
+              } else {
+                c.vote = 'favor';
+                c.hasRights = false;
+              }
+            } else if (action === 'against') {
+              if (c.vote === 'against' && !c.hasRights) {
+                c.hasRights = true;
+              } else if (c.vote === 'against' && c.hasRights) {
+                c.vote = 'none';
+                c.hasRights = false;
+              } else {
+                c.vote = 'against';
+                c.hasRights = false;
+              }
+            } else if (action === 'abstain') {
+              if (c.vote === 'abstain') {
+                c.vote = 'none';
+              } else {
+                c.vote = 'abstain';
+              }
+              c.hasRights = false;
+            } else if (action === 'pass') {
+              if (c.vote === 'pass') {
+                c.vote = 'none';
+              } else {
+                c.vote = 'pass';
+              }
               c.hasRights = false;
             }
+
             saveToLocalStorage(true, true);
             renderAll();
           });
