@@ -38,29 +38,29 @@
           </div>
         `;
       } else if (isPresent) {
-        // 出席（綠色）：改為透亮半透明綠底 (rgba(16, 185, 129, 0.28))，搭配鮮明綠色邊框與綠色文字
+        // 點「出席」：「缺席」按鈕徹底消失，「出席」按鈕自動擴展並佔據大小 2，呈現為：✓ 出席 (點擊切換 PV)
         rightContent = `
           <div class="rollcall-btn-container shrink-0 flex justify-end">
             <button type="button" class="btn-rollcall-expanded btn-rollcall-status-present w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(16, 185, 129, 0.28) !important; background: rgba(16, 185, 129, 0.28) !important; color: #10b981 !important; border: 2px solid #10b981 !important;">
-              出席
+              ✓ 出席 (點擊切換 PV)
             </button>
           </div>
         `;
       } else if (isPv) {
-        // 出席且投票（PV 琥珀金）：改為透亮半透明琥珀金底 (rgba(245, 158, 11, 0.28))，搭配琥珀色邊框與金色文字
+        // 再點一下切換為 ✓✓ P & Voting (點擊取消)
         rightContent = `
           <div class="rollcall-btn-container shrink-0 flex justify-end">
             <button type="button" class="btn-rollcall-expanded btn-rollcall-status-pv w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(245, 158, 11, 0.28) !important; background: rgba(245, 158, 11, 0.28) !important; color: #f59e0b !important; border: 2px solid #f59e0b !important;">
-              出席且投票
+              ✓✓ P & Voting (點擊取消)
             </button>
           </div>
         `;
       } else if (isAbsent) {
-        // 缺席（紅色）：改為透亮半透明紅底 (rgba(239, 68, 68, 0.28))，搭配紅色邊框與紅色文字
+        // 點「缺席」：「出席」按鈕徹底消失，「缺席」按鈕自動擴展至大小 2，呈現為：✕ 缺席 (點擊取消)
         rightContent = `
           <div class="rollcall-btn-container shrink-0 flex justify-end">
             <button type="button" class="btn-rollcall-expanded btn-rollcall-status-absent w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(239, 68, 68, 0.28) !important; background: rgba(239, 68, 68, 0.28) !important; color: #ef4444 !important; border: 2px solid #ef4444 !important;">
-              缺席
+              ✕ 缺席 (點擊取消)
             </button>
           </div>
         `;
