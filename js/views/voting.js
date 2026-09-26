@@ -26,40 +26,40 @@
       let rightContent = '';
 
       if (isUncalled) {
-        // 出席缺席大小要一樣，不用英文，文字為清晰白字（無紅綠字體）
+        // 出席缺席大小要一樣，不用英文，透亮半透明色彩
         rightContent = `
           <div class="rollcall-btn-container flex items-center space-x-2 shrink-0">
-            <button type="button" class="btn-rollcall-present flex-1 rounded-xl font-black text-center transition cursor-pointer" style="border: 1.5px solid #10b981 !important; color: #ffffff !important; background-color: rgba(16, 185, 129, 0.25) !important;">
+            <button type="button" class="btn-rollcall-present flex-1 rounded-xl font-black text-center transition cursor-pointer" style="border: 1.5px solid #10b981 !important; color: #10b981 !important; background-color: rgba(16, 185, 129, 0.15) !important;">
               出席
             </button>
-            <button type="button" class="btn-rollcall-absent flex-1 rounded-xl font-black text-center transition cursor-pointer" style="border: 1.5px solid #ef4444 !important; color: #ffffff !important; background-color: rgba(239, 68, 68, 0.25) !important;">
+            <button type="button" class="btn-rollcall-absent flex-1 rounded-xl font-black text-center transition cursor-pointer" style="border: 1.5px solid #ef4444 !important; color: #ef4444 !important; background-color: rgba(239, 68, 68, 0.15) !important;">
               缺席
             </button>
           </div>
         `;
       } else if (isPresent) {
-        // 按下去變成半透明綠色（再按變成 PV），文字為清晰白字
+        // 出席（綠色）：改為透亮半透明綠底 (rgba(16, 185, 129, 0.28))，搭配鮮明綠色邊框與綠色文字
         rightContent = `
           <div class="rollcall-btn-container shrink-0 flex justify-end">
-            <button type="button" class="btn-rollcall-expanded btn-rollcall-status-present w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(16, 185, 129, 0.28) !important; background: rgba(16, 185, 129, 0.28) !important; color: #ffffff !important; border: 2px solid #10b981 !important;">
+            <button type="button" class="btn-rollcall-expanded btn-rollcall-status-present w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(16, 185, 129, 0.28) !important; background: rgba(16, 185, 129, 0.28) !important; color: #10b981 !important; border: 2px solid #10b981 !important;">
               出席
             </button>
           </div>
         `;
       } else if (isPv) {
-        // 再按變成 PV（半透明琥珀金），文字為清晰白字
+        // 出席且投票（PV 琥珀金）：改為透亮半透明琥珀金底 (rgba(245, 158, 11, 0.28))，搭配琥珀色邊框與金色文字
         rightContent = `
           <div class="rollcall-btn-container shrink-0 flex justify-end">
-            <button type="button" class="btn-rollcall-expanded btn-rollcall-status-pv w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(245, 158, 11, 0.28) !important; background: rgba(245, 158, 11, 0.28) !important; color: #ffffff !important; border: 2px solid #f59e0b !important;">
+            <button type="button" class="btn-rollcall-expanded btn-rollcall-status-pv w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(245, 158, 11, 0.28) !important; background: rgba(245, 158, 11, 0.28) !important; color: #f59e0b !important; border: 2px solid #f59e0b !important;">
               出席且投票
             </button>
           </div>
         `;
       } else if (isAbsent) {
-        // 按下去變成半透明紅色，文字為清晰白字
+        // 缺席（紅色）：改為透亮半透明紅底 (rgba(239, 68, 68, 0.28))，搭配紅色邊框與紅色文字
         rightContent = `
           <div class="rollcall-btn-container shrink-0 flex justify-end">
-            <button type="button" class="btn-rollcall-expanded btn-rollcall-status-absent w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(239, 68, 68, 0.28) !important; background: rgba(239, 68, 68, 0.28) !important; color: #ffffff !important; border: 2px solid #ef4444 !important;">
+            <button type="button" class="btn-rollcall-expanded btn-rollcall-status-absent w-full rounded-xl font-black text-center transition cursor-pointer" style="background-color: rgba(239, 68, 68, 0.28) !important; background: rgba(239, 68, 68, 0.28) !important; color: #ef4444 !important; border: 2px solid #ef4444 !important;">
               缺席
             </button>
           </div>
