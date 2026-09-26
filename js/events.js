@@ -252,6 +252,14 @@
       }
     });
 
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement) {
+        document.body.classList.add('is-fullscreen');
+      } else {
+        document.body.classList.remove('is-fullscreen');
+      }
+    });
+
     // GSL
     document.getElementById('btn-gsl-start').addEventListener('click', startGslTimer);
     document.getElementById('btn-gsl-pause').addEventListener('click', pauseGslTimer);

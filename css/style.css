@@ -1623,5 +1623,30 @@
       border-bottom-color: var(--theme-text, #ffffff) !important;
     }
 
+    /* =====================================================
+       FULLSCREEN MODE - Push content down & center vertically
+       ===================================================== */
+    :fullscreen .view-panel,
+    :-webkit-full-screen .view-panel,
+    body.is-fullscreen .view-panel {
+      padding-top: clamp(2rem, 5.5vh, 5rem) !important;
+      transition: padding-top 0.3s ease;
+    }
+
+    :fullscreen #main-header,
+    :-webkit-full-screen #main-header,
+    body.is-fullscreen #main-header {
+      padding-top: clamp(0.35rem, 1.2vh, 1.2rem) !important;
+      padding-bottom: clamp(0.35rem, 1.2vh, 1.2rem) !important;
+      transition: padding 0.3s ease;
+    }
+
+    :fullscreen nav#tabs-nav,
+    :-webkit-full-screen nav#tabs-nav,
+    body.is-fullscreen nav#tabs-nav {
+      padding-top: clamp(0.2rem, 0.8vh, 0.8rem) !important;
+      padding-bottom: clamp(0.2rem, 0.8vh, 0.8rem) !important;
+    }
+
 
 
