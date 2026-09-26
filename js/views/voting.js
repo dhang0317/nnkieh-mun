@@ -227,12 +227,12 @@
     // Badge labels
     const badgeType = document.getElementById('label-vote-type-badge');
     if (badgeType) {
-      badgeType.textContent = (state.voteType === 'procedural') ? 'Procedural Vote' : 'Substantive Vote';
+      badgeType.textContent = (state.voteType === 'procedural') ? (t.proceduralVote || 'Procedural Vote') : (t.substantiveVote || 'Substantive Vote');
     }
     const badgeThresh = document.getElementById('label-vote-threshold-badge');
     if (badgeThresh) {
       const th = state.voteThreshold || 'simple';
-      badgeThresh.textContent = th === 'twothirds' ? '2/3 Majority' : (th === 'unsc9' ? 'UNSC 9 Required' : (th === 'consensus' ? 'Consensus' : 'Simple Majority'));
+      badgeThresh.textContent = th === 'twothirds' ? (t.twoThirdsMajorityRule || '2/3 Majority') : (th === 'unsc9' ? (t.unsc9RequiredRule || 'UNSC 9 Required') : (th === 'consensus' ? (t.consensusMajorityRule || 'Consensus') : (t.simpleMajorityRule || 'Simple Majority')));
     }
 
     const eligibleVoters = state.selectedCountries.filter(c => {
@@ -280,8 +280,10 @@
 
     const lblFavor = document.getElementById('vote-progress-label-favor');
     const lblAgainst = document.getElementById('vote-progress-label-against');
-    if (lblFavor) lblFavor.textContent = `Favor: ${favorPct}% (${favorCount})`;
-    if (lblAgainst) lblAgainst.textContent = `Against: ${againstPct}% (${againstCount})`;
+    const favorWord = t.inFavor || t.yes || 'Favor';
+    const againstWord = t.against || t.no || 'Against';
+    if (lblFavor) lblFavor.textContent = `${favorWord}: ${favorPct}% (${favorCount})`;
+    if (lblAgainst) lblAgainst.textContent = `${againstWord}: ${againstPct}% (${againstCount})`;
 
     // Veto Detection
     const vetoNations = state.selectedCountries.filter(c => c.powerStatus === 'veto' && c.vote === 'against');
@@ -405,23 +407,29 @@
     const stageLabel = document.getElementById('label-active-voter-stage');
 
     if (stageLabel) {
-      stageLabel.textContent = state.voteStage === 'r2' ? 'Round 2 Roll Call (Passes)' : 'Round 1 Roll Call';
+      stageLabel.textContent = state.voteStage === 'r2' ? (t.round2RollCall || 'Round 2 Roll Call (Passes)') : (t.round1RollCall || 'Round 1 Roll Call');
     }
 
     if (currentVoter) {
       if (flagEl) flagEl.src = getFlagUrl(currentVoter);
       if (nameEl) nameEl.textContent = getCountryDisplayName(currentVoter);
       if (statusEl) {
+        let voteDisplayName = '';
+        if (currentVoter.vote === 'favor') voteDisplayName = t.yes || '贊成';
+        else if (currentVoter.vote === 'against') voteDisplayName = t.no || '反對';
+        else if (currentVoter.vote === 'abstain') voteDisplayName = t.abs || '棄權';
+        else if (currentVoter.vote === 'pass') voteDisplayName = t.pass || 'Pass';
+
         const voteTxt = currentVoter.vote && currentVoter.vote !== 'none' 
-          ? `Current: ${currentVoter.vote.toUpperCase()}${currentVoter.hasRights ? ' (+Rights)' : ''}` 
-          : (currentVoter.attendance === 'pv' ? 'Present and voting (No Abstain)' : 'Present');
+          ? `${t.voting || 'Vote'}: ${voteDisplayName}${currentVoter.hasRights ? ' ' + (t.withRightsTag || '(+Rights)') : ''}` 
+          : (currentVoter.attendance === 'pv' ? (t.pv || '出席且投票') : (t.present || '出席'));
         statusEl.textContent = voteTxt;
       }
       if (queueEl) queueEl.textContent = `${state.activeVoterIndex + 1} / ${pool.length}`;
     } else {
       if (flagEl) flagEl.src = '';
-      if (nameEl) nameEl.textContent = pool.length === 0 && state.voteStage === 'r2' ? 'No delegates passed in Round 1' : 'All votes recorded';
-      if (statusEl) statusEl.textContent = pool.length === 0 ? '' : 'Voting complete';
+      if (nameEl) nameEl.textContent = pool.length === 0 && state.voteStage === 'r2' ? (t.noPassInRound1Short || 'No delegates passed in Round 1') : (t.allVotesRecorded || 'All votes recorded');
+      if (statusEl) statusEl.textContent = pool.length === 0 ? '' : (t.votingComplete || 'Voting complete');
       if (queueEl) queueEl.textContent = `0 / 0`;
     }
 
@@ -431,18 +439,24 @@
     const btnPass = document.getElementById('btn-cast-pass');
     const btnAbstain = document.getElementById('btn-cast-abstain');
 
+    const yesText = t.yes || '贊成';
+    const noText = t.no || '反對';
+    const absText = t.abs || '棄權';
+    const passText = t.pass || 'Pass';
+    const rightsTag = t.withRightsTag || '(+Rights)';
+
     if (btnFavor) {
       btnFavor.disabled = !currentVoter;
       const isFavor = currentVoter && currentVoter.vote === 'favor';
       const hasR = currentVoter && currentVoter.hasRights;
       if (isFavor && hasR) {
-        btnFavor.textContent = '贊成 (+Rights)';
+        btnFavor.textContent = `${yesText} ${rightsTag}`;
         btnFavor.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-emerald-500 bg-emerald-500/20 text-xs transition font-normal';
       } else if (isFavor) {
-        btnFavor.textContent = '贊成 (Favor)';
+        btnFavor.textContent = yesText;
         btnFavor.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-emerald-400 bg-emerald-500/10 text-xs transition font-normal';
       } else {
-        btnFavor.textContent = '贊成 (Favor)';
+        btnFavor.textContent = yesText;
         btnFavor.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition font-normal';
       }
     }
@@ -452,13 +466,13 @@
       const isAgainst = currentVoter && currentVoter.vote === 'against';
       const hasR = currentVoter && currentVoter.hasRights;
       if (isAgainst && hasR) {
-        btnAgainst.textContent = '反對 (+Rights)';
+        btnAgainst.textContent = `${noText} ${rightsTag}`;
         btnAgainst.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-rose-500 bg-rose-500/20 text-xs transition font-normal';
       } else if (isAgainst) {
-        btnAgainst.textContent = '反對 (Against)';
+        btnAgainst.textContent = noText;
         btnAgainst.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-rose-400 bg-rose-500/10 text-xs transition font-normal';
       } else {
-        btnAgainst.textContent = '反對 (Against)';
+        btnAgainst.textContent = noText;
         btnAgainst.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition font-normal';
       }
     }
@@ -468,6 +482,7 @@
       btnPass.disabled = state.voteStage === 'r2' || !currentVoter;
       btnPass.style.opacity = (state.voteStage === 'r2' || !currentVoter) ? '0.4' : '1';
       const isPass = currentVoter && currentVoter.vote === 'pass';
+      btnPass.textContent = passText;
       if (isPass) {
         btnPass.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-400 bg-slate-300 text-xs transition font-normal';
       } else {
@@ -481,6 +496,7 @@
       btnAbstain.disabled = !currentVoter || isPv || isProcedural;
       btnAbstain.style.opacity = (!currentVoter || isPv || isProcedural) ? '0.4' : '1';
       const isAbstain = currentVoter && currentVoter.vote === 'abstain';
+      btnAbstain.textContent = absText;
       if (isAbstain) {
         btnAbstain.className = 'w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-amber-400 bg-amber-500/20 text-xs transition font-normal';
       } else {

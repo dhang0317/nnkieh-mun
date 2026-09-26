@@ -659,30 +659,32 @@
           <!-- MUN Command Primary Voting Action Buttons (With Rights 整合在按鈕內原位循環) -->
           <div id="active-voter-actions" class="w-full max-w-xl grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
             <!-- Favor (Cycle: Favor -> Favor+Rights -> None) -->
-            <button id="btn-cast-favor" type="button" class="w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition">
-              贊成 (Favor)
+            <button id="btn-cast-favor" type="button" class="w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition" data-i18n="yes">
+              贊成
             </button>
             <!-- Against (Cycle: Against -> Against+Rights -> None) -->
-            <button id="btn-cast-against" type="button" class="w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition">
-              反對 (Against)
+            <button id="btn-cast-against" type="button" class="w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition" data-i18n="no">
+              反對
             </button>
             <!-- Abstain -->
-            <button id="btn-cast-abstain" type="button" class="w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition">
-              棄權 (Abstain)
+            <button id="btn-cast-abstain" type="button" class="w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition" data-i18n="abs">
+              棄權
             </button>
             <!-- Pass -->
-            <button id="btn-cast-pass" type="button" class="w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition">
-              Pass (留至第二輪)
+            <button id="btn-cast-pass" type="button" class="w-full min-h-[46px] py-2.5 px-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-xs transition" data-i18n="pass">
+              跳過 (Pass)
             </button>
           </div>
 
           <div class="flex items-center space-x-4 text-xs text-slate-400 pt-1">
-            <button id="btn-prev-voter" class="hover:text-slate-700 transition">
-              <i class="fa-solid fa-chevron-left mr-1"></i>上一個 (Previous)
+            <button id="btn-prev-voter" class="hover:text-slate-700 transition flex items-center space-x-1">
+              <i class="fa-solid fa-chevron-left mr-1"></i>
+              <span data-i18n="previousVoter">上一個 (Previous)</span>
             </button>
             <span id="label-voter-queue-status">1 / 15</span>
-            <button id="btn-next-voter" class="hover:text-slate-700 transition">
-              下一個 (Next)<i class="fa-solid fa-chevron-right ml-1"></i>
+            <button id="btn-next-voter" class="hover:text-slate-700 transition flex items-center space-x-1">
+              <span data-i18n="nextVoter">下一個 (Next)</span>
+              <i class="fa-solid fa-chevron-right ml-1"></i>
             </button>
           </div>
         </div>
@@ -702,7 +704,7 @@
         <div id="panel-ballots-container" class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
           <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
             <h4 class="text-slate-800 text-sm" data-i18n="rollCallBallots">Roll-Call Ballots</h4>
-            <span class="text-xs text-slate-400" id="label-ballots-summary">點擊右側按鈕可快速修改個別代表投票</span>
+            <span class="text-xs text-slate-400" id="label-ballots-summary" data-i18n="ballotsSummaryHint">點擊右側按鈕可快速修改個別代表投票</span>
           </div>
           <div id="grid-substantive-ballots" class="grid grid-cols-1 md:grid-cols-2 gap-3.5 transition-all duration-200">
             <!-- Injected via JS -->
@@ -1156,11 +1158,11 @@
     <script src="js/views/unmod.js?v=2026092601"></script>
     <script src="js/views/single.js?v=2026092601"></script>
     <script src="js/views/motions.js?v=2026092601"></script>
-    <script src="js/views/voting.js?v=2026092609"></script>
+    <script src="js/views/voting.js?v=2026092610"></script>
     <!-- Events, Auth & Entry Point -->
-    <script src="js/events.js?v=2026092609"></script>
+    <script src="js/events.js?v=2026092610"></script>
     <script src="js/auth.js?v=2026092601"></script>
-    <script src="app.js?v=2026092609"></script>
+    <script src="app.js?v=2026092610"></script>
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
