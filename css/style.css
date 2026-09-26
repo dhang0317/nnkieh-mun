@@ -229,7 +229,7 @@
     }
 
     /* Dark Mode Buttons */
-    body:not(.light-mode) button {
+    body:not(.light-mode) button:not(.btn-rollcall-status-present):not(.btn-rollcall-status-pv):not(.btn-rollcall-status-absent):not(.btn-rollcall-present):not(.btn-rollcall-absent):not(#vote-stage-r1):not(#vote-stage-r2):not(#vote-stage-rights) {
       background-color: transparent !important;
       background: transparent !important;
       color: #ffffff !important;
@@ -1353,60 +1353,40 @@
     /* =========================================================
        ROLL CALL BUTTON COLORS - CLEAN NEUTRAL TEXT (NO GREEN/RED TEXT)
        ========================================================= */
-    /* 未點名 - 出席按鈕：綠邊框、柔和綠底、純淨文字（深色白字/淺色黑字，絕無綠字） */
+    /* 未點名 - 出席按鈕：綠色邊框與半透明綠色背景 (rgba(16, 185, 129, 0.15))，文字為翡翠綠 */
     body:not(.light-mode) .btn-rollcall-present,
+    body.light-mode .btn-rollcall-present,
     .btn-rollcall-present {
       border: 1.5px solid #10b981 !important;
-      color: #ffffff !important;
-      background-color: rgba(16, 185, 129, 0.22) !important;
-      background: rgba(16, 185, 129, 0.22) !important;
-    }
-    body.light-mode .btn-rollcall-present {
-      border: 1.5px solid #10b981 !important;
-      color: #000000 !important;
-      background-color: rgba(16, 185, 129, 0.18) !important;
-      background: rgba(16, 185, 129, 0.18) !important;
+      color: #10b981 !important;
+      background-color: rgba(16, 185, 129, 0.15) !important;
+      background: rgba(16, 185, 129, 0.15) !important;
     }
     body:not(.light-mode) .btn-rollcall-present:hover,
+    body.light-mode .btn-rollcall-present:hover,
     .btn-rollcall-present:hover {
-      background-color: rgba(16, 185, 129, 0.38) !important;
-      background: rgba(16, 185, 129, 0.38) !important;
-      color: #ffffff !important;
-      border-color: #34d399 !important;
-    }
-    body.light-mode .btn-rollcall-present:hover {
       background-color: rgba(16, 185, 129, 0.3) !important;
       background: rgba(16, 185, 129, 0.3) !important;
-      color: #000000 !important;
-      border-color: #059669 !important;
+      color: #34d399 !important;
+      border-color: #34d399 !important;
     }
 
-    /* 未點名 - 缺席按鈕：紅邊框、柔和紅底、純淨文字（深色白字/淺色黑字，絕無紅字） */
+    /* 未點名 - 缺席按鈕：紅色邊框與半透明紅色背景 (rgba(239, 68, 68, 0.15))，文字為鮮紅色 */
     body:not(.light-mode) .btn-rollcall-absent,
+    body.light-mode .btn-rollcall-absent,
     .btn-rollcall-absent {
       border: 1.5px solid #ef4444 !important;
-      color: #ffffff !important;
-      background-color: rgba(239, 68, 68, 0.22) !important;
-      background: rgba(239, 68, 68, 0.22) !important;
-    }
-    body.light-mode .btn-rollcall-absent {
-      border: 1.5px solid #ef4444 !important;
-      color: #000000 !important;
-      background-color: rgba(239, 68, 68, 0.18) !important;
-      background: rgba(239, 68, 68, 0.18) !important;
+      color: #ef4444 !important;
+      background-color: rgba(239, 68, 68, 0.15) !important;
+      background: rgba(239, 68, 68, 0.15) !important;
     }
     body:not(.light-mode) .btn-rollcall-absent:hover,
+    body.light-mode .btn-rollcall-absent:hover,
     .btn-rollcall-absent:hover {
-      background-color: rgba(239, 68, 68, 0.38) !important;
-      background: rgba(239, 68, 68, 0.38) !important;
-      color: #ffffff !important;
-      border-color: #f87171 !important;
-    }
-    body.light-mode .btn-rollcall-absent:hover {
       background-color: rgba(239, 68, 68, 0.3) !important;
       background: rgba(239, 68, 68, 0.3) !important;
-      color: #000000 !important;
-      border-color: #dc2626 !important;
+      color: #f87171 !important;
+      border-color: #f87171 !important;
     }
 
     /* 點選後單一展開按鈕共通基礎 */
