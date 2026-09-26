@@ -665,8 +665,12 @@
       });
     }
 
-    // Helper function for active voter buttons with PV-style cycle
-    function handleActiveVoterChoice(action) {
+    // Timer for detecting single click vs double click on Active Voter Card buttons
+    let activeVoterClickTimer = null;
+    let lastActiveAction = null;
+
+    // Helper function for active voter buttons with single-click (vote & next) vs double-click (+Rights)
+    function handleActiveVoterClick(action) {
       if (state.isViewerMode) return;
       const eligible = state.selectedCountries.filter(c => {
         if (state.voteType === 'procedural') {
@@ -679,61 +683,75 @@
       const voter = pool[idx];
       if (!voter) return;
 
-      if (action === 'favor') {
-        if (voter.vote === 'favor' && !voter.hasRights) {
-          voter.hasRights = true;
-        } else if (voter.vote === 'favor' && voter.hasRights) {
-          voter.vote = 'none';
-          voter.hasRights = false;
-        } else {
-          voter.vote = 'favor';
-          voter.hasRights = false;
+      // If clicked again within 300ms for favor/against, treat as double click (+Rights)
+      if (activeVoterClickTimer && lastActiveAction === action && (action === 'favor' || action === 'against')) {
+        clearTimeout(activeVoterClickTimer);
+        activeVoterClickTimer = null;
+        lastActiveAction = null;
+
+        // Double Click Triggered:
+        // Set to Favor / Against with Rights, then advance to next country
+        voter.vote = action;
+        voter.hasRights = true;
+        if (idx < pool.length - 1) {
+          state.activeVoterIndex = idx + 1;
         }
-      } else if (action === 'against') {
-        if (voter.vote === 'against' && !voter.hasRights) {
-          voter.hasRights = true;
-        } else if (voter.vote === 'against' && voter.hasRights) {
-          voter.vote = 'none';
-          voter.hasRights = false;
-        } else {
-          voter.vote = 'against';
-          voter.hasRights = false;
-        }
-      } else if (action === 'abstain') {
-        if (voter.vote === 'abstain') {
-          voter.vote = 'none';
-        } else {
-          voter.vote = 'abstain';
-        }
-        voter.hasRights = false;
-      } else if (action === 'pass') {
-        if (voter.vote === 'pass') {
-          voter.vote = 'none';
-        } else {
-          voter.vote = 'pass';
-        }
-        voter.hasRights = false;
+        saveToLocalStorage(true, true);
+        renderResolutionVoteGrid();
+        return;
       }
 
-      saveToLocalStorage(true, true);
-      renderResolutionVoteGrid();
+      // If there was a pending timer for a different action, flush it first
+      if (activeVoterClickTimer) {
+        clearTimeout(activeVoterClickTimer);
+        activeVoterClickTimer = null;
+      }
+
+      lastActiveAction = action;
+
+      if (action === 'favor' || action === 'against') {
+        // Wait 280ms to see if user double-clicks for (+Rights)
+        activeVoterClickTimer = setTimeout(() => {
+          activeVoterClickTimer = null;
+          lastActiveAction = null;
+
+          // Single Click: vote normally and advance to next country
+          voter.vote = action;
+          voter.hasRights = false;
+          if (idx < pool.length - 1) {
+            state.activeVoterIndex = idx + 1;
+          }
+          saveToLocalStorage(true, true);
+          renderResolutionVoteGrid();
+        }, 280);
+      } else {
+        // Abstain / Pass - immediate single click action and advance
+        lastActiveAction = null;
+        voter.vote = action;
+        voter.hasRights = false;
+        if (idx < pool.length - 1) {
+          state.activeVoterIndex = idx + 1;
+        }
+        saveToLocalStorage(true, true);
+        renderResolutionVoteGrid();
+      }
     }
 
     const btnCastFavor = document.getElementById('btn-cast-favor');
     if (btnCastFavor) {
-      btnCastFavor.addEventListener('click', () => handleActiveVoterChoice('favor'));
+      btnCastFavor.addEventListener('click', () => handleActiveVoterClick('favor'));
     }
     const btnCastAgainst = document.getElementById('btn-cast-against');
     if (btnCastAgainst) {
-      btnCastAgainst.addEventListener('click', () => handleActiveVoterChoice('against'));
+      btnCastAgainst.addEventListener('click', () => handleActiveVoterClick('against'));
     }
     const btnCastAbstain = document.getElementById('btn-cast-abstain');
     if (btnCastAbstain) {
-      btnCastAbstain.addEventListener('click', () => handleActiveVoterChoice('abstain'));
+      btnCastAbstain.addEventListener('click', () => handleActiveVoterClick('abstain'));
     }
     const btnCastPass = document.getElementById('btn-cast-pass');
     if (btnCastPass) {
-      btnCastPass.addEventListener('click', () => handleActiveVoterChoice('pass'));
+      btnCastPass.addEventListener('click', () => handleActiveVoterClick('pass'));
     }
     const btnPrevVoter = document.getElementById('btn-prev-voter');
     if (btnPrevVoter) {
